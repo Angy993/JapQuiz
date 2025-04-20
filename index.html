@@ -312,16 +312,13 @@ let index = 0;
       }
     }
 
-function popolaSidebar() {
-  const sidebar = document.getElementById("paroleSidebar");
-  sidebar.innerHTML = ""; // <-- Questo è il fix che evita i duplicati
+function startQuiz() {
+  document.getElementById("start-screen").style.display = "none";
+  document.getElementById("quiz-container").style.display = "flex";
 
-  data.forEach(entry => {
-    const traduzione = entry[currentLang === 'it' ? "italiano" : "inglese"] || "[manca traduzione]";
-    const li = document.createElement("li");
-    li.innerHTML = `<span class="blur">${entry.romaji}</span> – ${traduzione}`;
-    sidebar.appendChild(li);
-  });
+  loadQuestion();
+  popolaSidebar();
+  updateScore();
 }
 
     function toggleTheme() {
@@ -342,6 +339,7 @@ window.onload = () => {
   } else if (localStorage.getItem("theme") === "dark") {
     document.body.classList.add("dark");
   }
+};
 
       if (localStorage.getItem("theme") === "dark") {
         document.body.classList.add("dark");
