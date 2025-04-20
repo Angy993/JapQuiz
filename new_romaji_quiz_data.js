@@ -290,3 +290,93 @@ const data = [
     }
   }
 ];
+const spiegazioniGeneriche = {
+  "wa": {
+    descrizione: {
+      it: "Particella del tema.",
+      en: "Topic particle."
+    },
+    uso: {
+      it: "Indica il soggetto della frase.",
+      en: "Marks the topic of the sentence."
+    },
+    esempio: {
+      it: "Watashi wa gakusei desu.",
+      en: "I am a student."
+    },
+    nota: {
+      it: "Si scrive は ma si legge 'wa'.",
+      en: "Written as は but pronounced 'wa'."
+    },
+    perche: {
+      it: "Watashi è il soggetto che compie l'azione.",
+      en: "Watashi is the one performing the action."
+    }
+  },
+  "o": {
+    descrizione: {
+      it: "Particella dell’oggetto diretto.",
+      en: "Direct object particle."
+    },
+    uso: {
+      it: "Introduce ciò che subisce l'azione.",
+      en: "Marks what receives the action."
+    },
+    esempio: {
+      it: "Ringo o taberu.",
+      en: "I eat an apple."
+    },
+    nota: {
+      it: "Si scrive を ma si legge 'o'.",
+      en: "Written as を but pronounced 'o'."
+    },
+    perche: {
+      it: "L'oggetto che viene mangiato, guardato, ecc.",
+      en: "The object being eaten, watched, etc."
+    }
+  },
+  "ni": {
+    descrizione: {
+      it: "Particella di destinazione o tempo.",
+      en: "Direction or time particle."
+    },
+    uso: {
+      it: "Indica dove si va o quando.",
+      en: "Indicates direction or time."
+    },
+    esempio: {
+      it: "Gakkou ni iku.",
+      en: "I go to school."
+    },
+    nota: {
+      it: "Può indicare direzione, tempo o destinatario.",
+      en: "Can mark direction, time, or recipient."
+    },
+    perche: {
+      it: "Serve per indicare la destinazione o il tempo.",
+      en: "Used for destination or time indication."
+    }
+  },
+  "to": {
+    descrizione: {
+      it: "Particella connettiva (con).",
+      en: "Connecting particle (with)."
+    },
+    uso: {
+      it: "Usata per indicare compagnia.",
+      en: "Used to show companionship."
+    },
+    esempio: {
+      it: "Tomodachi to hanasu.",
+      en: "I speak with a friend."
+    },
+    nota: {
+      it: "Collega due elementi o persone.",
+      en: "Connects two elements or people."
+    },
+    perche: {
+      it: "Indica con chi si svolge l’azione.",
+      en: "Shows with whom the action is done."
+    }
+  }
+};
