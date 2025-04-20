@@ -212,6 +212,22 @@
         document.getElementById("question").innerHTML = "<strong>Traduci:</strong> " + data[index].italiano;
       } else {
         document.getElementById("question").innerHTML = "Hai completato il quiz!";
+        if (wrongAnswers.length > 0) {
+          const btn = document.createElement("button");
+          btn.textContent = "Ripeti solo quelle sbagliate";
+          btn.onclick = () => {
+            data = [...wrongAnswers];
+            index = 0;
+            score = 0;
+            wrongAnswers = [];
+            document.querySelector(".input-group").style.display = "block";
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("spiegazioni").innerHTML = "";
+            loadQuestion();
+            updateScore();
+          };
+          document.getElementById("result").appendChild(btn);
+        }
         document.querySelector(".input-group").style.display = "none";
       }
     }
