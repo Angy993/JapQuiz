@@ -312,14 +312,17 @@ let index = 0;
       }
     }
 
-    function popolaSidebar() {
-      const sidebar = document.getElementById("paroleSidebar");
-      data.forEach(entry => {
-        const li = document.createElement("li");
-        li.innerHTML = `<span class="blur">${entry.romaji}</span> – ${entry[currentLang === 'it' ? "italiano" : "inglese"]}`;
-        sidebar.appendChild(li);
-      });
-    }
+function popolaSidebar() {
+  const sidebar = document.getElementById("paroleSidebar");
+  sidebar.innerHTML = ""; // Pulizia
+
+  data.forEach(entry => {
+    const traduzione = entry[currentLang === 'it' ? "italiano" : "inglese"] || "[manca traduzione]";
+    const li = document.createElement("li");
+    li.innerHTML = `<span class="blur">${entry.romaji}</span> – ${traduzione}`;
+    sidebar.appendChild(li);
+  });
+}
 
     function toggleTheme() {
       document.body.classList.toggle("dark");
