@@ -1,4 +1,5 @@
-{
+const data = [
+  {
   "romaji": "miru",
   "italiano": "guardare",
   "inglese": "to watch / see",
