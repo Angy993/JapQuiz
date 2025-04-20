@@ -309,8 +309,8 @@ let index = 0;
         document.getElementById("question").innerHTML = "<strong>" + (currentLang === 'it' ? "Traduci" : "Translate") + ":</strong> " + data[index][currentLang === 'it' ? "italiano" : "inglese"];
       } else {
         
-      document.getElementById("question").innerHTML = "Hai completato il quiz!";
-      document.getElementById("progress-text").textContent = `Punteggio finale: ${score} / ${data.length}`;
+      document.getElementById("question").innerHTML = currentLang === "it" ? "Hai completato il quiz!" : "You’ve completed the quiz!";
+document.getElementById("progress-text").textContent = (currentLang === "it" ? "Punteggio finale" : "Final score") + `: ${score} / ${data.length}`;
       document.getElementById("progress-fill").style.width = "100%";
       const restartBtn = document.createElement("button");
       restartBtn.textContent = currentLang === "it" ? "Ricomincia da capo" : "Restart from beginning";
