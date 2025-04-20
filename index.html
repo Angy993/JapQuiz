@@ -217,13 +217,75 @@
   <script>
     
 let currentLang = 'it'; // default language
-
+const labels = {
+  title: {
+    it: "Benvenuto al Quiz di Romaji",
+    en: "Welcome to the Romaji Quiz"
+  },
+  subtitle: {
+    it: "Metti alla prova la tua conoscenza del giapponese!",
+    en: "Test your Japanese knowledge!"
+  },
+  startButton: {
+    it: "Inizia il quiz",
+    en: "Start the quiz"
+  },
+  translate: {
+    it: "Traduci",
+    en: "Translate"
+  },
+  learnedWords: {
+    it: "Parole Imparate",
+    en: "Learned Words"
+  },
+  quizDone: {
+    it: "Hai completato il quiz!",
+    en: "You've completed the quiz!"
+  },
+  finalScore: {
+    it: "Punteggio finale",
+    en: "Final score"
+  },
+  restart: {
+    it: "Ricomincia da capo",
+    en: "Start over"
+  },
+  retryWrong: {
+    it: "Ripeti solo quelle sbagliate",
+    en: "Retry only wrong answers"
+  },
+  commands: {
+    it: "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta",
+    en: "Enter = Check | → = Next | ← = Back | Q = Skip"
+  }
+};
+    function aggiornaTestiStatici() {
+  const t = labels;
+  document.querySelector("h1").textContent = t.title[currentLang];
+  document.querySelector("#start-screen p").textContent = t.subtitle[currentLang];
+  document.querySelector("#start-screen button").textContent = t.startButton[currentLang];
+  document.querySelector(".sidebar h3").textContent = t.learnedWords[currentLang];
+  document.querySelector(".container div:nth-of-type(4)").innerHTML = `<strong>Comandi:</strong><br>${t.commands[currentLang]}`;
+}
 function setLanguage(lang) {
   currentLang = lang;
   document.getElementById("lang-it").style.fontWeight = lang === 'it' ? "bold" : "normal";
   document.getElementById("lang-en").style.fontWeight = lang === 'en' ? "bold" : "normal";
-  loadQuestion(); // reload current question
-  popolaSidebar(); // reload sidebar
+
+  // Traduzioni dinamiche
+  document.querySelector(".quiz-title").textContent = lang === 'it' ? "Quiz di Romaji Giapponese" : "Japanese Romaji Quiz";
+  document.getElementById("start-screen").querySelector("h1").textContent = lang === 'it' ? "Benvenuto al Quiz di Romaji" : "Welcome to the Romaji Quiz";
+  document.getElementById("start-screen").querySelector("p").textContent = lang === 'it' ? "Metti alla prova la tua conoscenza del giapponese!" : "Test your knowledge of Japanese!";
+  document.getElementById("start-screen").querySelector("button").textContent = lang === 'it' ? "Inizia il quiz" : "Start Quiz";
+  document.querySelector(".sidebar h3").textContent = lang === 'it' ? "Parole Imparate" : "Learned Words";
+
+  const comandiTesto = lang === 'it'
+    ? "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta"
+    : "Enter = Check | → = Next | ← = Back | Q = Skip";
+  document.querySelector(".container").querySelectorAll("div")[3].innerHTML = `<strong>${lang === 'it' ? "Comandi:" : "Commands:"}</strong><br>${comandiTesto}`;
+
+  loadQuestion();
+  popolaSidebar();
 }
 
 let index = 0;
@@ -251,7 +313,7 @@ let index = 0;
       document.getElementById("progress-text").textContent = `Punteggio finale: ${score} / ${data.length}`;
       document.getElementById("progress-fill").style.width = "100%";
       const restartBtn = document.createElement("button");
-      restartBtn.textContent = "Ricomincia da capo";
+      restartBtn.textContent = currentLang === "it" ? "Ricomincia da capo" : "Restart from beginning";
       restartBtn.onclick = () => {
         index = 0;
         score = 0;
@@ -267,7 +329,7 @@ let index = 0;
 
         if (wrongAnswers.length > 0) {
           const btn = document.createElement("button");
-          btn.textContent = "Ripeti solo quelle sbagliate";
+          btn.textContent = currentLang === "it" ? "Ripeti solo quelle sbagliate" : "Repeat only wrong ones";
           btn.onclick = () => {
             data = [...wrongAnswers];
             index = 0;
