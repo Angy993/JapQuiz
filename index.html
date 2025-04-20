@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quiz di Romaji Giapponese</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg-color: #f9fafc;
+      --text-color: #2e2e2e;
+      --card-color: #ffffff;
+      --accent-color: #4a69bd;
+      --blur-color: #eef3f8;
+    }
+
+    body.dark {
+      --bg-color: #1e1e1e;
+      --text-color: #f1f1f1;
+      --card-color: #2a2a2a;
+      --accent-color: #a2c0ff;
+      --blur-color: #333740;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg-color);
+      font-family: 'Poppins', sans-serif;
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .layout {
+      display: flex;
+      flex-wrap: wrap;
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      gap: 30px;
+    }
+
+    .container {
+      flex: 1;
+      background: var(--card-color);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      padding: 30px;
+      transition: background 0.3s;
+    }
+
+    .quiz-title {
+      font-size: 30px;
+      margin-bottom: 25px;
+      text-align: center;
+      color: var(--accent-color);
+      font-weight: 600;
+    }
+
+    .question {
+      font-size: 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input {
+      font-size: 20px;
+      padding: 12px 16px;
+      width: 320px;
+      border: 2px solid #dcdfe6;
+      border-radius: 10px;
+      background: var(--bg-color);
+      color: var(--text-color);
+      transition: all 0.3s;
+    }
+
+    input:focus {
+      border-color: var(--accent-color);
+      outline: none;
+    }
+
+    button {
+      font-size: 16px;
+      padding: 10px 18px;
+      margin-left: 10px;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .result {
+      font-size: 18px;
+      margin-top: 30px;
+      line-height: 1.6;
+    }
+
+    .explanation {
+      background: var(--blur-color);
+      padding: 16px;
+      margin-top: 15px;
+      border-left: 5px solid var(--accent-color);
+      border-radius: 8px;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .sidebar {
+      width: 280px;
+      background: var(--card-color);
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      padding: 25px;
+      height: fit-content;
+      transition: background 0.3s;
+    }
+
+    .sidebar h3 {
+      margin-top: 0;
+      font-size: 20px;
+      color: var(--accent-color);
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .sidebar li {
+      margin-bottom: 12px;
+    }
+
+    .blur {
+      filter: blur(5px);
+      transition: filter 0.3s;
+      cursor: pointer;
+    }
+
+    .blur:hover {
+      filter: blur(0);
+    }
+
+    .version {
+      position: fixed;
+      top: 10px;
+      left: 20px;
+      font-size: 13px;
+      color: #888;
+      font-style: italic;
+    }
+
+    .toggle-theme {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      font-size: 16px;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: var(--accent-color);
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="version">Deluxe</div>
+  <button class="toggle-theme" onclick="toggleTheme()">Dark Mode</button>
+  
+    <div id="start-screen" style="text-align:center; padding: 100px 20px;">
+      <h1 style="font-size: 36px; margin-bottom: 20px;">Benvenuto al Quiz di Romaji</h1>
+      <p style="font-size: 18px; margin-bottom: 30px;">Metti alla prova la tua conoscenza del giapponese!</p>
+      <button onclick="startQuiz()" style="font-size: 18px; padding: 12px 24px; background: var(--accent-color); color: white; border: none; border-radius: 10px; cursor: pointer;">Inizia il quiz</button>
+    </div>
+    <div class="layout" id="quiz-container" style="display:none;">
+
+    <div class="container">
+      <div class="quiz-title">Quiz di Romaji Giapponese</div>
+      
+    <div id="progress-bar" style="height: 10px; background: #ddd; border-radius: 8px; overflow: hidden; margin-bottom: 15px;">
+      <div id="progress-fill" style="height: 100%; width: 0%; background: var(--accent-color); transition: width 0.3s;"></div>
+    </div>
+    <div id="progress-text" style="text-align: center; font-size: 14px; margin-bottom: 15px; color: var(--text-color);"></div>
+    <div id="question" class="question"></div>
+    
+      <div class="input-group">
+        <input type="text" id="userInput" placeholder="Scrivi in romaji" />
+        <button onclick="checkAnswer()">Verifica</button>
+      </div>
+      <div class="result" id="result"></div>
+      <div id="spiegazioni"></div>
+    </div>
+    <div class="sidebar">
+      <h3>Parole Imparate</h3>
+      <ul id="paroleSidebar"></ul>
+    </div>
+  </div>
+  <script src="new_romaji_quiz_data.js"></script>
+  <script>
+    let index = 0;
+    let score = 0;
+    let wrongAnswers = [];
+
+    function updateScore() {
+      document.querySelector(".version").innerText = `Punteggio: ${score}`;
+    }
+
+    function loadQuestion() {
+      document.getElementById("userInput").value = "";
+      document.getElementById("result").innerHTML = "";
+      document.getElementById("spiegazioni").innerHTML = "";
+      
+      const pct = Math.round((index / data.length) * 100);
+      document.getElementById("progress-fill").style.width = pct + "%";
+      document.getElementById("progress-text").textContent = `${index + 1} / ${data.length}`;
+      if (index < data.length) {
+    
+        document.getElementById("question").innerHTML = "<strong>Traduci:</strong> " + data[index].italiano;
+      } else {
+        document.getElementById("question").innerHTML = "Hai completato il quiz!";
+        if (wrongAnswers.length > 0) {
+          const btn = document.createElement("button");
+          btn.textContent = "Ripeti solo quelle sbagliate";
+          btn.onclick = () => {
+            data = [...wrongAnswers];
+            index = 0;
+            score = 0;
+            wrongAnswers = [];
+            document.querySelector(".input-group").style.display = "block";
+            document.getElementById("result").innerHTML = "";
+            document.getElementById("spiegazioni").innerHTML = "";
+            loadQuestion();
+            updateScore();
+          };
+          document.getElementById("result").appendChild(btn);
+        }
+        document.querySelector(".input-group").style.display = "none";
+      }
+    }
+
+    function checkAnswer() {
+      const input = document.getElementById("userInput").value.trim().toLowerCase();
+      const correct = data[index].romaji.toLowerCase();
+      if (input === correct) {
+        let result = "<strong>Frase:</strong><br>" + data[index].frase + "<br><em>" + data[index].traduzione + "</em><br>";
+        document.getElementById("result").innerHTML = result;
+        const spiegazioni = data[index].spiegazioni || {};
+        let spiegaHtml = "";
+        for (let part in spiegazioni) {
+          const s = spiegazioni[part];
+          spiegaHtml += "<div class='explanation'><strong>" + part + "</strong><br>" +
+            "<em><strong>Descrizione:</strong></em> " + s.descrizione + "<br>" +
+            "<em><strong>Uso:</strong></em> " + s.uso + "<br>" +
+            "<em><strong>Esempio:</strong></em> " + s.esempio + "<br>" +
+            "<em><strong>Nota:</strong></em> " + s.nota + "<br>" +
+            (s.perche ? "<em><strong>Perché:</strong></em> " + s.perche : "") +
+            "</div>";
+        }
+        document.getElementById("spiegazioni").innerHTML = spiegaHtml;
+        score++;
+        updateScore();
+      } else {
+        document.getElementById("result").innerHTML = "<span style='color:red;'>✗ Risposta sbagliata. Riprova.</span>";
+        wrongAnswers.push(data[index]);
+      }
+    }
+
+    function popolaSidebar() {
+      const sidebar = document.getElementById("paroleSidebar");
+      data.forEach(entry => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="blur">${entry.romaji}</span> – ${entry.italiano}`;
+        sidebar.appendChild(li);
+      });
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      const mode = document.body.classList.contains("dark") ? "dark" : "light";
+      localStorage.setItem("theme", mode);
+    }
+
+    function startQuiz() {
+  document.getElementById("start-screen").style.display = "none";
+  document.getElementById("quiz-container").style.display = "flex";
+}
+
+window.onload = () => {
+  if (!localStorage.getItem("theme")) {
+    document.body.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  } else if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+  }
+
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+      }
+      loadQuestion();
+      popolaSidebar();
+      updateScore();
+    };
+
+    document.getElementById("userInput").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") checkAnswer();
+    });
+
+    document.addEventListener("keydown", function(event) {
+      if (event.key.toLowerCase() === "q") {
+        index++;
+        loadQuestion();
+      }
+    });
+  </script>
+</body>
+</html>
