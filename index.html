@@ -347,24 +347,7 @@ window.onload = () => {
     document.body.classList.add("dark");
   }
 };
-
-      if (localStorage.getItem("theme") === "dark") {
-        document.body.classList.add("dark");
-      }
-      loadQuestion();
-      popolaSidebar();
-      updateScore();
-    };
-
-    document.getElementById("userInput").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") checkAnswer();
-    });
-
-    document.addEventListener("keydown", function(event) {
-      
-      if (event.key === "ArrowRight") {
-        index++;
-        loadQuestion();
+    
       } else if (event.key === "ArrowLeft") {
         index = Math.max(0, index - 1);
         loadQuestion();
