@@ -291,7 +291,17 @@ let index = 0;
       if (input === correct) {
         let result = "<strong>Frase:</strong><br>" + data[index].frase + "<br><em>" + data[index].traduzione[currentLang] + "</em><br>";
         document.getElementById("result").innerHTML = result;
-        const spiegazioni = data[index].spiegazioni || {};
+        // Unisce spiegazioni manuali + quelle generiche rilevate nella frase
+const spiegazioni = { ...(data[index].spiegazioni || {}) };
+
+["wa", "o", "ni", "to"].forEach(particle => {
+  if (
+    !spiegazioni[particle] &&
+    data[index].frase.includes(` ${particle} `)
+  ) {
+    spiegazioni[particle] = spiegazioniGeneriche[particle];
+  }
+});
         let spiegaHtml = "";
         for (let part in spiegazioni) {
           const s = spiegazioni[part];
