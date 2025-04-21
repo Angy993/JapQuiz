@@ -166,6 +166,20 @@
       border: none;
       cursor: pointer;
     }
+      .assistente-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+  }
   </style>
 </head>
 <body>
@@ -441,7 +455,18 @@ window.onload = () => {
   const btn = document.querySelector(".toggle-theme");
   btn.textContent = document.body.classList.contains("dark") ? "Light Mode" : "Dark Mode";
 };
-
+function apriAssistente() {
+  const width = 480;
+  const height = 720;
+  const left = (screen.width / 2) - (width / 2);
+  const top = (screen.height / 2) - (height / 2);
+  window.open(
+    "https://chat.openai.com/",
+    "AssistenteAI",
+    `width=${width},height=${height},top=${top},left=${left},resizable=yes`
+  );
+}
 </script>
+  <button class="assistente-btn" onclick="apriAssistente()">Assistente AI</button>
 </body>
 </html>
