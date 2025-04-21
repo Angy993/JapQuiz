@@ -433,6 +433,17 @@ function startQuiz() {
     }
   });
 }
+    document.addEventListener("keydown", function(e) {
+  if (e.key === "Shift") {
+    document.querySelectorAll(".blur").forEach(el => el.classList.remove("blur"));
+  }
+});
+
+document.addEventListener("keyup", function(e) {
+  if (e.key === "Shift") {
+    document.querySelectorAll("#paroleSidebar span").forEach(el => el.classList.add("blur"));
+  }
+});
 function toggleTheme() {
   const body = document.body;
   const btn = document.querySelector(".toggle-theme");
