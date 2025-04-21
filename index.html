@@ -285,22 +285,6 @@ function setLanguage(lang) {
   loadQuestion();
   popolaSidebar();
 }
-  function aggiornaTestiStatici() {
-  const l = labels[currentLang];
-  document.querySelector("#start-screen h1").textContent = l.welcomeTitle;
-  document.querySelector("#start-screen p").textContent = l.welcomeText;
-  document.querySelector("#start-screen button").textContent = l.startButton;
-  document.querySelector(".quiz-title").textContent = l.welcomeTitle;
-  document.querySelector(".sidebar h3").textContent = l.learnedWords;
-
-  const comandi = currentLang === 'it'
-    ? "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta"
-    : "Enter = Check | → = Next | ← = Back | Q = Skip";
-
-  document.querySelector("#quiz-container div[style*='text-align:center']").innerHTML = `
-    <strong>${currentLang === 'it' ? "Comandi" : "Commands"}:</strong><br>${comandi}
-  `;
-}
 
 function setLanguage(lang) {
   currentLang = lang;
