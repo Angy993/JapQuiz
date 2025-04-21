@@ -437,6 +437,15 @@ document.addEventListener("keyup", function(e) {
     });
   }
 });
+  document.addEventListener("keyup", function(e) {
+  if (e.key === "Shift") {
+    document.querySelectorAll("#paroleSidebar .blur").forEach(el => {
+      if (!el.classList.contains("blur-traduzione")) {
+        el.classList.add("blur");
+      }
+    });
+  }
+});
 document.addEventListener("keydown", function(event) {
     if (event.key === "ArrowRight") {
       index++;
