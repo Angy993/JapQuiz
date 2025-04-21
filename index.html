@@ -309,6 +309,20 @@ const labels = {
   document.querySelector(".container div:nth-of-type(4)").innerHTML = `<strong>Comandi:</strong><br>${t.commands[currentLang]}`;
 }
 function setLanguage(lang) {
+  function aggiornaTestiStatici() {
+  const l = labels[currentLang];
+
+  document.querySelector("#start-screen h1").textContent = l.welcomeTitle;
+  document.querySelector("#start-screen p").textContent = l.welcomeText;
+  document.querySelector("#start-screen button").textContent = l.startButton;
+  document.querySelector(".quiz-title").textContent = l.welcomeTitle;
+  document.querySelector(".sidebar h3").textContent = l.learnedWords;
+
+  document.querySelector("#quiz-container div[style*='text-align:center']").innerHTML = `
+    <strong>${l.commands}:</strong><br>
+    Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta
+  `;
+}
   currentLang = lang;
   document.getElementById("lang-it").style.fontWeight = lang === 'it' ? "bold" : "normal";
   document.getElementById("lang-en").style.fontWeight = lang === 'en' ? "bold" : "normal";
@@ -327,6 +341,7 @@ function setLanguage(lang) {
 
   loadQuestion();
   popolaSidebar();
+  aggiornaTestiStatici();
 }
 
 let index = 0;
