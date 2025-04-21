@@ -409,17 +409,26 @@ function startQuiz() {
   document.getElementById("userInput").addEventListener("keydown", function(event) {
     if (event.key === "Enter") checkAnswer();
   });
-  let lastShiftTime = 0;
+ let lastShiftTime = 0;
 
 document.addEventListener("keydown", function(e) {
   if (e.key === "Shift") {
     const now = Date.now();
     if (now - lastShiftTime < 400) {
+      // doppio Shift => toggle blur-traduzione
       document.querySelectorAll(".blur-traduzione").forEach(el => el.classList.toggle("blur"));
     } else {
+      // singolo Shift => mostra romaji
       document.querySelectorAll(".blur").forEach(el => el.classList.remove("blur"));
     }
     lastShiftTime = now;
+  }
+});
+
+document.addEventListener("keyup", function(e) {
+  if (e.key === "Shift") {
+    // riapplica blur solo al romaji (non tocca traduzione)
+    document.querySelectorAll("#paroleSidebar span.blur").forEach(el => el.classList.add("blur"));
   }
 });
 
