@@ -282,10 +282,7 @@ function setLanguage(lang) {
   loadQuestion();         // ricarica la domanda con la lingua corretta
   popolaSidebar();        // aggiorna la sidebar nella lingua scelta
 }
-  currentLang = lang;
-  document.getElementById("lang-it").style.fontWeight = lang === 'it' ? "bold" : "normal";
-  document.getElementById("lang-en").style.fontWeight = lang === 'en' ? "bold" : "normal";
-
+  
   // Traduzioni dinamiche
   document.querySelector(".quiz-title").textContent = lang === 'it' ? "Quiz di Romaji Giapponese" : "Japanese Romaji Quiz";
   document.getElementById("start-screen").querySelector("h1").textContent = lang === 'it' ? "Benvenuto al Quiz di Romaji" : "Welcome to the Romaji Quiz";
