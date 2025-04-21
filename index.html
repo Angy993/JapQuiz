@@ -406,7 +406,7 @@ function popolaSidebar() {
   data.forEach(entry => {
     const traduzione = entry[currentLang === 'it' ? "italiano" : "inglese"] || "[manca traduzione]";
     const li = document.createElement("li");
-    li.innerHTML = `<span class="blur">${entry.romaji}</span> – <span class="traduzione blur-traduzione">${traduzione}</span>`;
+    li.innerHTML = `<span class="blur">${entry.romaji}</span> – <span class="blur-traduzione blur">${traduzione}</span>`;
     sidebar.appendChild(li);
   });
 
@@ -426,6 +426,31 @@ function startQuiz() {
   document.getElementById("userInput").addEventListener("keydown", function(event) {
     if (event.key === "Enter") checkAnswer();
   });
+  let lastShiftTime = 0;
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === "Shift") {
+    const now = Date.now();
+    if (now - lastShiftTime < 400) {
+      document.querySelectorAll(".blur-traduzione").forEach(el => el.classList.toggle("blur"));
+    } else {
+      document.querySelectorAll(".blur").forEach(el => el.classList.remove("blur"));
+    }
+    lastShiftTime = now;
+  }
+});
+
+document.addEventListener("keyup", function(e) {
+  if (e.key === "Shift") {
+    setTimeout(() => {
+      document.querySelectorAll("#paroleSidebar .blur-traduzione").forEach(el => {
+        if (!el.classList.contains("blur")) return;
+        el.classList.add("blur");
+      });
+      document.querySelectorAll("#paroleSidebar span.blur").forEach(el => el.classList.add("blur"));
+    }, 200);
+  }
+});
 
   document.addEventListener("keydown", function(event) {
     if (event.key === "ArrowRight") {
