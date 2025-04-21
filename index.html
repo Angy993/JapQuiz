@@ -406,7 +406,7 @@ function popolaSidebar() {
   data.forEach(entry => {
     const traduzione = entry[currentLang === 'it' ? "italiano" : "inglese"] || "[manca traduzione]";
     const li = document.createElement("li");
-    li.innerHTML = `<span class="blur">${entry.romaji}</span> – ${traduzione}`;
+    li.innerHTML = `<span class="blur">${entry.romaji}</span> – <span class="traduzione blur-traduzione">${traduzione}</span>`;
     sidebar.appendChild(li);
   });
 
