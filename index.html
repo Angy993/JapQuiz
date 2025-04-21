@@ -456,14 +456,15 @@ window.onload = () => {
   btn.textContent = document.body.classList.contains("dark") ? "Light Mode" : "Dark Mode";
 };
 function apriAssistente() {
-  const width = 480;
-  const height = 720;
-  const left = (screen.width / 2) - (width / 2);
-  const top = (screen.height / 2) - (height / 2);
+  const width = 420;
+  const height = 600;
+  const left = (window.innerWidth - width) / 2;
+  const top = (window.innerHeight - height) / 2;
+
   window.open(
-    "https://chat.openai.com/",
-    "AssistenteAI",
-    `width=${width},height=${height},top=${top},left=${left},resizable=yes`
+    "https://chat.openai.com",
+    "ChatGPT_Assistant",
+    `width=${width},height=${height},left=${left},top=${top},resizable=yes`
   );
 }
 </script>
