@@ -400,13 +400,19 @@ const spiegazioni = { ...(data[index].spiegazioni || {}) };
     }
 function popolaSidebar() {
   const sidebar = document.getElementById("paroleSidebar");
-  sidebar.innerHTML = ""; // previene duplicati o vuoti
+  const conteggio = document.getElementById("conteggioParole");
+  sidebar.innerHTML = "";
+
   data.forEach(entry => {
     const traduzione = entry[currentLang === 'it' ? "italiano" : "inglese"] || "[manca traduzione]";
     const li = document.createElement("li");
     li.innerHTML = `<span class="blur">${entry.romaji}</span> – ${traduzione}`;
     sidebar.appendChild(li);
   });
+
+  conteggio.textContent = currentLang === "it"
+    ? `Totale: ${data.length} parole`
+    : `Total: ${data.length} words`;
 }
 function startQuiz() {
   document.getElementById("start-screen").style.display = "none";
