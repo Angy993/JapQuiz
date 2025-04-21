@@ -286,34 +286,6 @@ function setLanguage(lang) {
   popolaSidebar();
 }
 
-function setLanguage(lang) {
-  currentLang = lang;
-
-  document.getElementById("lang-it").style.fontWeight = lang === 'it' ? "bold" : "normal";
-  document.getElementById("lang-en").style.fontWeight = lang === 'en' ? "bold" : "normal";
-
-  aggiornaTestiStatici();
-  loadQuestion();
-  popolaSidebar();
-}
-  
-  // Traduzioni dinamiche
-  document.querySelector(".quiz-title").textContent = lang === 'it' ? "Quiz di Romaji Giapponese" : "Japanese Romaji Quiz";
-  document.getElementById("start-screen").querySelector("h1").textContent = lang === 'it' ? "Benvenuto al Quiz di Romaji" : "Welcome to the Romaji Quiz";
-  document.getElementById("start-screen").querySelector("p").textContent = lang === 'it' ? "Metti alla prova la tua conoscenza del giapponese!" : "Test your knowledge of Japanese!";
-  document.getElementById("start-screen").querySelector("button").textContent = lang === 'it' ? "Inizia il quiz" : "Start Quiz";
-  document.querySelector(".sidebar h3").textContent = lang === 'it' ? "Parole Imparate" : "Learned Words";
-
-  const comandiTesto = lang === 'it'
-    ? "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta"
-    : "Enter = Check | → = Next | ← = Back | Q = Skip";
-  document.querySelector(".container").querySelectorAll("div")[3].innerHTML = `<strong>${lang === 'it' ? "Comandi:" : "Commands:"}</strong><br>${comandiTesto}`;
-
-  loadQuestion();
-  popolaSidebar();
-  aggiornaTestiStatici();
-}
-
 let index = 0;
     let score = 0;
     let wrongAnswers = [];
