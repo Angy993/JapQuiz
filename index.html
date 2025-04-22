@@ -185,7 +185,7 @@
 <body>
   <div class="version">Deluxe</div>
   
-    <button class="toggle-theme" onclick="toggleTheme()">Dark Mode</button>
+    <button class="toggle-theme" id="toggleThemeBtn">Dark Mode</button>
     <div style="position: fixed; top: 10px; right: 140px; font-size: 14px;">
       Lingua:
       <span id="lang-it" onclick="setLanguage('it')" style="cursor:pointer; margin-right: 6px;">Italiano</span>|
@@ -452,6 +452,12 @@ document.addEventListener("keydown", function(e) {
     });
   }
 }); 
+  document.addEventListener("DOMContentLoaded", function () {
+  const toggleBtn = document.getElementById("toggleThemeBtn");
+  if (toggleBtn) {
+    toggleBtn.addEventListener("click", toggleTheme);
+  }
+});
 window.onload = () => {
   const savedTheme = localStorage.getItem("theme");
 
