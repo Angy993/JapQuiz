@@ -230,6 +230,19 @@
   </div>
   <script src="new_romaji_quiz_data.js"></script>
   <script>
+    function toggleTheme() {
+  const body = document.body;
+  const btn = document.querySelector(".toggle-theme");
+
+  body.classList.toggle("dark");
+  const isDark = body.classList.contains("dark");
+
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+
+  if (btn) {
+    btn.textContent = isDark ? "Light Mode" : "Dark Mode";
+  }
+}
     
 let currentLang = 'it'; // default language
     const labels = {
@@ -483,19 +496,6 @@ function apriAssistente() {
   );
 }
 </script>
-  function toggleTheme() {
-  const body = document.body;
-  const btn = document.querySelector(".toggle-theme");
-
-  body.classList.toggle("dark");
-  const isDark = body.classList.contains("dark");
-
-  localStorage.setItem("theme", isDark ? "dark" : "light");
-
-  if (btn) {
-    btn.textContent = isDark ? "Light Mode" : "Dark Mode";
-  }
-}
   <button class="assistente-btn" onclick="apriAssistente()">Assistente AI</button>
 </body>
 </html>
