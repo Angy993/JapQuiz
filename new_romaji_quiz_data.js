@@ -289,201 +289,237 @@ const data = [
       "en": "I borrow a book."
     }
   },
-
-  // —— Nuove 20 parole —— 
+  // ——————————————————————
+  // Ecco le 20 parole aggiunte:
   {
     "romaji": "kuruma",
     "italiano": "Macchina",
     "inglese": "Car",
     "frase": "Kuruma o kau.",
-    "traduzione": {
-      "it": "Compro una macchina.",
-      "en": "I buy a car."
-    }
+    "traduzione": { "it": "Compro una macchina.", "en": "I buy a car." }
   },
   {
     "romaji": "tenki",
     "italiano": "Tempo (meteo)",
     "inglese": "Weather",
     "frase": "Tenki wa ii desu.",
-    "traduzione": {
-      "it": "Il tempo è bello.",
-      "en": "The weather is nice."
-    }
+    "traduzione": { "it": "Il tempo è bello.", "en": "The weather is nice." }
   },
   {
     "romaji": "yasui",
     "italiano": "Economico",
     "inglese": "Cheap",
     "frase": "Kore wa yasui desu.",
-    "traduzione": {
-      "it": "Questo è economico.",
-      "en": "This is cheap."
-    }
+    "traduzione": { "it": "Questo è economico.", "en": "This is cheap." }
   },
   {
     "romaji": "takai",
     "italiano": "Costoso",
     "inglese": "Expensive",
     "frase": "Kono kuruma wa takai desu.",
-    "traduzione": {
-      "it": "Questa macchina è costosa.",
-      "en": "This car is expensive."
-    }
+    "traduzione": { "it": "Questa macchina è costosa.", "en": "This car is expensive." }
   },
   {
     "romaji": "kirei",
     "italiano": "Bello / Pulito",
     "inglese": "Beautiful / Clean",
     "frase": "Kono heya wa kirei desu.",
-    "traduzione": {
-      "it": "Questa stanza è pulita.",
-      "en": "This room is clean."
-    }
+    "traduzione": { "it": "Questa stanza è pulita.", "en": "This room is clean." }
   },
   {
     "romaji": "atarashii",
     "italiano": "Nuovo",
     "inglese": "New",
     "frase": "Atarashii hon o yomu.",
-    "traduzione": {
-      "it": "Leggo un libro nuovo.",
-      "en": "I read a new book."
-    }
+    "traduzione": { "it": "Leggo un libro nuovo.", "en": "I read a new book." }
   },
   {
     "romaji": "furui",
     "italiano": "Vecchio",
     "inglese": "Old",
     "frase": "Furui jitensha o tsukau.",
-    "traduzione": {
-      "it": "Uso una bicicletta vecchia.",
-      "en": "I use an old bicycle."
-    }
+    "traduzione": { "it": "Uso una bicicletta vecchia.", "en": "I use an old bicycle." }
   },
   {
     "romaji": "ookii",
     "italiano": "Grande",
     "inglese": "Big",
     "frase": "Ookii ie ni sunde imasu.",
-    "traduzione": {
-      "it": "Abito in una casa grande.",
-      "en": "I live in a big house."
-    }
+    "traduzione": { "it": "Abito in una casa grande.", "en": "I live in a big house." }
   },
   {
     "romaji": "chiisai",
     "italiano": "Piccolo",
     "inglese": "Small",
     "frase": "Chiisai neko ga iru.",
-    "traduzione": {
-      "it": "C'è un gattino piccolo.",
-      "en": "There is a small cat."
-    }
+    "traduzione": { "it": "C'è un gattino piccolo.", "en": "There is a small cat." }
   },
   {
     "romaji": "hayai",
     "italiano": "Veloce",
     "inglese": "Fast",
     "frase": "Kare wa hayaku hashiru.",
-    "traduzione": {
-      "it": "Lui corre veloce.",
-      "en": "He runs fast."
-    }
+    "traduzione": { "it": "Lui corre veloce.", "en": "He runs fast." }
   },
   {
     "romaji": "osoi",
     "italiano": "Lento",
     "inglese": "Slow",
     "frase": "Kono denwa wa osoi desu.",
-    "traduzione": {
-      "it": "Questo telefono è lento.",
-      "en": "This phone is slow."
-    }
+    "traduzione": { "it": "Questo telefono è lento.", "en": "This phone is slow." }
   },
   {
     "romaji": "atsui",
     "italiano": "Caldo",
     "inglese": "Hot",
     "frase": "Natsu wa atsui desu.",
-    "traduzione": {
-      "it": "L'estate è calda.",
-      "en": "Summer is hot."
-    }
+    "traduzione": { "it": "L'estate è calda.", "en": "Summer is hot." }
   },
   {
     "romaji": "samui",
     "italiano": "Freddo (clima)",
     "inglese": "Cold",
     "frase": "Fuyu wa samui desu.",
-    "traduzione": {
-      "it": "L'inverno è freddo.",
-      "en": "Winter is cold."
-    }
+    "traduzione": { "it": "L'inverno è freddo.", "en": "Winter is cold." }
   },
   {
     "romaji": "tsumetai",
     "italiano": "Freddo (oggetti)",
     "inglese": "Cold (objects)",
     "frase": "Mizu ga tsumetai desu.",
-    "traduzione": {
-      "it": "L’acqua è fredda.",
-      "en": "The water is cold."
-    }
+    "traduzione": { "it": "L’acqua è fredda.", "en": "The water is cold." }
   },
   {
     "romaji": "oishii",
     "italiano": "Buono (cibo)",
     "inglese": "Delicious",
     "frase": "Ringo wa oishii desu.",
-    "traduzione": {
-      "it": "La mela è buona.",
-      "en": "The apple is delicious."
-    }
+    "traduzione": { "it": "La mela è buona.", "en": "The apple is delicious." }
   },
   {
     "romaji": "mazui",
     "italiano": "Cattivo (cibo)",
     "inglese": "Bad tasting",
     "frase": "Kono tabemono wa mazui desu.",
-    "traduzione": {
-      "it": "Questo cibo è cattivo.",
-      "en": "This food tastes bad."
-    }
+    "traduzione": { "it": "Questo cibo è cattivo.", "en": "This food tastes bad." }
   },
   {
     "romaji": "takusan",
     "italiano": "Molti",
     "inglese": "Many",
     "frase": "Takusan no hon o yomu.",
-    "traduzione": {
-      "it": "Leggo molti libri.",
-      "en": "I read many books."
-    }
+    "traduzione": { "it": "Leggo molti libri.", "en": "I read many books." }
   },
   {
     "romaji": "sukunai",
     "italiano": "Pochi",
     "inglese": "Few",
     "frase": "Sukunai hito ga iru.",
-    "traduzione": {
-      "it": "Ci sono poche persone.",
-      "en": "There are few people."
-    }
+    "traduzione": { "it": "Ci sono poche persone.", "en": "There are few people." }
   },
   {
     "romaji": "omoi",
     "italiano": "Pesante",
     "inglese": "Heavy",
     "frase": "Kono kaban wa omoi desu.",
-    "traduzione": {
-      "it": "Questa borsa è pesante.",
-      "en": "This bag is heavy."
-    }
+    "traduzione": { "it": "Questa borsa è pesante.", "en": "This bag is heavy." }
   },
   {
     "romaji": "karui",
     "italiano": "Leggero",
     "inglese": "Light",
     "frase": "Kono kaban wa karui desu.",
-    "traduzione":
+    "traduzione": { "it": "Questa borsa è leggera.", "en": "This bag is light." }
+  }
+];
+
+const spiegazioniGeneriche = {
+  "wa": {
+    descrizione: {
+      it: "Particella del tema.",
+      en: "Topic particle."
+    },
+    uso: {
+      it: "Indica il soggetto della frase.",
+      en: "Marks the topic of the sentence."
+    },
+    esempio: {
+      it: "Watashi wa gakusei desu.",
+      en: "I am a student."
+    },
+    nota: {
+      it: "Si scrive は ma si legge 'wa'.",
+      en: "Written as は but pronounced 'wa'."
+    },
+    perche: {
+      it: "Watashi è il soggetto che compie l'azione.",
+      en: "Watashi is the one performing the action."
+    }
+  },
+  "o": {
+    descrizione: {
+      it: "Particella dell’oggetto diretto.",
+      en: "Direct object particle."
+    },
+    uso: {
+      it: "Introduce ciò che subisce l'azione.",
+      en: "Marks what receives the action."
+    },
+    esempio: {
+      it: "Ringo o taberu.",
+      en: "I eat an apple."
+    },
+    nota: {
+      it: "Si scrive を ma si legge 'o'.",
+      en: "Written as を but pronounced 'o'."
+    },
+    perche: {
+      it: "L'oggetto che viene mangiato, guardato, ecc.",
+      en: "The object being eaten, watched, etc."
+    }
+  },
+  "ni": {
+    descrizione: {
+      it: "Particella di destinazione o tempo.",
+      en: "Direction or time particle."
+    },
+    uso: {
+      it: "Indica dove si va o quando.",
+      en: "Indicates direction or time."
+    },
+    esempio: {
+      it: "Gakkou ni iku.",
+      en: "I go to school."
+    },
+    nota: {
+      it: "Può indicare direzione, tempo o destinatario.",
+      en: "Can mark direction, time, or recipient."
+    },
+    perche: {
+      it: "Serve per indicare la destinazione o il tempo.",
+      en: "Used for destination or time indication."
+    }
+  },
+  "to": {
+    descrizione: {
+      it: "Particella connettiva (con).",
+      en: "Connecting particle (with)."
+    },
+    uso: {
+      it: "Usata per indicare compagnia.",
+      en: "Used to show companionship."
+    },
+    esempio: {
+      it: "Tomodachi to hanasu.",
+      en: "I speak with a friend."
+    },
+    nota: {
+      it: "Collega due elementi o persone.",
+      en: "Connects two elements or people."
+    },
+    perche: {
+      it: "Indica con chi si svolge l’azione.",
+      en: "Shows with whom the action is done."
+    }
+  }
+};
