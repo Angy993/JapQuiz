@@ -442,6 +442,16 @@ document.addEventListener("keydown", function(e) {
     loadQuestion();
   }
 });
+  document.addEventListener("keyup", function(e) {
+  if (e.key === "Shift") {
+    // Riapplica blur solo al romaji (non alla traduzione)
+    document.querySelectorAll("#paroleSidebar .blur").forEach(el => {
+      if (!el.classList.contains("blur-traduzione")) {
+        el.classList.add("blur");
+      }
+    });
+  }
+});
 
 document.addEventListener("keyup", function(e) {
   if (e.key === "Shift") {
