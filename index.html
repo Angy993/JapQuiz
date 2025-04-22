@@ -80,7 +80,7 @@
 <body>
   <div class="version">Deluxe</div>
   <button class="toggle-theme" id="toggleThemeBtn">Dark Mode</button>
-  <div style="position:fixed; top:10px; right:140px; font-size:14px;">
+  <div style="position:fixed; top:10px; right:160px; font-size:14px;">
     <span id="languageLabel">Lingua:</span>
     <span id="lang-it" style="cursor:pointer; margin:0 6px;">Italiano</span>|
     <span id="lang-en" style="cursor:pointer; margin:0 6px;">Inglese</span>
@@ -124,100 +124,88 @@
 
   <script src="new_romaji_quiz_data.js"></script>
   <script>
-    // === Labels per tutte le lingue ===
     const labels = {
       it: {
-        welcomeTitle: "Benvenuto al Quiz di Romaji",
-        welcomeText: "Metti alla prova la tua conoscenza del giapponese!",
-        startButton: "Inizia il quiz",
-        learnedWords: "Parole Imparate",
-        verifyButton: "Verifica",
-        inputPlaceholder: "Scrivi in romaji",
-        copyWords: "Copia parole",
-        assistantButton: "Assistente AI",
-        languageLabel: "Lingua:",
-        commands: "Comandi",
-        translate: "Traduci",
-        restart: "Ricomincia da capo",
-        retryWrong: "Ripeti solo quelle sbagliate",
-        completed: "Hai completato il quiz!",
-        finalScore: "Punteggio finale",
-        themeDark: "Modalità Scura",
-        themeLight: "Modalità Chiara"
+        welcomeTitle:"Benvenuto al Quiz di Romaji",
+        welcomeText:"Metti alla prova la tua conoscenza del giapponese!",
+        startButton:"Inizia il quiz",
+        learnedWords:"Parole Imparate",
+        verifyButton:"Verifica",
+        inputPlaceholder:"Scrivi in romaji",
+        copyWords:"Copia parole",
+        assistantButton:"Assistente AI",
+        languageLabel:"Lingua:",
+        commands:"Comandi",
+        translate:"Traduci",
+        restart:"Ricomincia da capo",
+        retryWrong:"Ripeti solo quelle sbagliate",
+        completed:"Hai completato il quiz!",
+        finalScore:"Punteggio finale",
+        themeDark:"Modalità Scura",
+        themeLight:"Modalità Chiara"
       },
       en: {
-        welcomeTitle: "Welcome to the Romaji Quiz",
-        welcomeText: "Test your knowledge of Japanese!",
-        startButton: "Start the quiz",
-        learnedWords: "Learned Words",
-        verifyButton: "Check",
-        inputPlaceholder: "Type in romaji",
-        copyWords: "Copy words",
-        assistantButton: "AI Assistant",
-        languageLabel: "Language:",
-        commands: "Shortcuts",
-        translate: "Translate",
-        restart: "Restart from beginning",
-        retryWrong: "Repeat only wrong ones",
-        completed: "You’ve completed the quiz!",
-        finalScore: "Final score",
-        themeDark: "Dark Mode",
-        themeLight: "Light Mode"
+        welcomeTitle:"Welcome to the Romaji Quiz",
+        welcomeText:"Test your knowledge of Japanese!",
+        startButton:"Start the quiz",
+        learnedWords:"Learned Words",
+        verifyButton:"Check",
+        inputPlaceholder:"Type in romaji",
+        copyWords:"Copy words",
+        assistantButton:"AI Assistant",
+        languageLabel:"Language:",
+        commands:"Shortcuts",
+        translate:"Translate",
+        restart:"Restart from beginning",
+        retryWrong:"Repeat only wrong ones",
+        completed:"You’ve completed the quiz!",
+        finalScore:"Final score",
+        themeDark:"Dark Mode",
+        themeLight:"Light Mode"
       }
     };
 
-    // ==================================================
-    // Funzione per aggiornare **tutti** i testi statici
-    // ==================================================
     function aggiornaTestiStatici() {
       const l = labels[currentLang];
-
-      // start screen
       document.querySelector("#start-screen h1").textContent = l.welcomeTitle;
       document.querySelector("#start-screen p").textContent = l.welcomeText;
       document.getElementById("startBtn").textContent = l.startButton;
-
-      // quiz header & sidebar title
       document.querySelector(".quiz-title").textContent = l.welcomeTitle;
       document.querySelector(".sidebar h3").textContent = l.learnedWords;
-
-      // placeholder e verify button
       document.getElementById("userInput").placeholder = l.inputPlaceholder;
       document.getElementById("verifyBtn").textContent = l.verifyButton;
-
-      // copia parole e assistente AI
       document.getElementById("copyWordsBtn").textContent = l.copyWords;
       document.getElementById("assistBtn").textContent = l.assistantButton;
-
-      // etichetta Lingua
       document.getElementById("languageLabel").textContent = l.languageLabel;
-
-      // comandi dinamici
-      const cmdText = currentLang === 'it'
+      const cmdText = currentLang==='it'
         ? "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta"
         : "Enter = Check | → = Next | ← = Back | Q = Skip";
       document.querySelector("#quiz-container div[style*='text-align:center']")
         .innerHTML = `<strong>${l.commands}:</strong><br>${cmdText}`;
-
-      // toggle theme
+      // tema
       const themeBtn = document.getElementById("toggleThemeBtn");
       const isDark = document.body.classList.contains("dark");
       themeBtn.textContent = isDark ? l.themeLight : l.themeDark;
     }
 
-    // ================================
-    // Resto del quiz & sidebar logic
-    // ================================
-    let currentLang = 'it',
-        index = 0,
-        score = 0,
-        wrongAnswers = [],
-        blurState = 0;  // stato per sidebar blur
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+      aggiornaTestiStatici();
+    }
+
+    function apriAssistente() {
+      const w=420,h=600,left=(window.innerWidth-w)/2,top=(window.innerHeight-h)/2;
+      window.open("https://chat.openai.com","ChatGPT_Assistant",
+        `width=${w},height=${h},left=${left},top=${top},resizable=yes`);
+    }
+
+    let currentLang='it', index=0, score=0, wrongAnswers=[], blurState=0;
 
     function setLanguage(lang) {
-      currentLang = lang;
-      document.getElementById("lang-it").style.fontWeight = lang === 'it' ? "bold" : "normal";
-      document.getElementById("lang-en").style.fontWeight = lang === 'en' ? "bold" : "normal";
+      currentLang=lang;
+      document.getElementById("lang-it").style.fontWeight=lang==='it'?"bold":"normal";
+      document.getElementById("lang-en").style.fontWeight=lang==='en'?"bold":"normal";
       aggiornaTestiStatici();
       loadQuestion();
       popolaSidebar();
@@ -229,34 +217,34 @@
     }
 
     function loadQuestion() {
-      document.getElementById("userInput").value = "";
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("spiegazioni").innerHTML = "";
-      const pct = Math.round((index / data.length) * 100);
-      document.getElementById("progress-fill").style.width = pct + "%";
-      document.getElementById("progress-text").textContent = `${index + 1} / ${data.length}`;
-      if (index < data.length) {
-        document.getElementById("question").innerHTML =
-          `<strong>${labels[currentLang].translate}:</strong> ` +
-          data[index][ currentLang === 'it' ? "italiano" : "inglese" ];
+      document.getElementById("userInput").value="";
+      document.getElementById("result").innerHTML="";
+      document.getElementById("spiegazioni").innerHTML="";
+      const pct=Math.round((index/data.length)*100);
+      document.getElementById("progress-fill").style.width=pct+"%";
+      document.getElementById("progress-text").textContent=`${index+1} / ${data.length}`;
+      if(index<data.length){
+        document.getElementById("question").innerHTML=
+          `<strong>${labels[currentLang].translate}:</strong> `+
+          data[index][ currentLang==='it'?"italiano":"inglese" ];
       } else {
-        document.getElementById("question").textContent = labels[currentLang].completed;
-        document.getElementById("progress-text").textContent =
+        document.getElementById("question").textContent=labels[currentLang].completed;
+        document.getElementById("progress-text").textContent=
           `${labels[currentLang].finalScore}: ${score} / ${data.length}`;
-        document.getElementById("progress-fill").style.width = "100%";
-        document.querySelector(".input-group").style.display = "none";
-        const res = document.getElementById("result");
-        const btnR = document.createElement("button");
-        btnR.textContent = labels[currentLang].restart;
-        btnR.onclick = () => location.reload();
+        document.getElementById("progress-fill").style.width="100%";
+        document.querySelector(".input-group").style.display="none";
+        const res=document.getElementById("result");
+        const btnR=document.createElement("button");
+        btnR.textContent=labels[currentLang].restart;
+        btnR.onclick=()=>location.reload();
         res.appendChild(btnR);
-        if (wrongAnswers.length) {
-          const btnW = document.createElement("button");
-          btnW.textContent = labels[currentLang].retryWrong;
-          btnW.onclick = () => {
-            data = [...wrongAnswers];
-            index = 0; score = 0; wrongAnswers = [];
-            document.querySelector(".input-group").style.display = "block";
+        if(wrongAnswers.length){
+          const btnW=document.createElement("button");
+          btnW.textContent=labels[currentLang].retryWrong;
+          btnW.onclick=()=>{
+            data=[...wrongAnswers];
+            index=0; score=0; wrongAnswers=[];
+            document.querySelector(".input-group").style.display="block";
             loadQuestion(); updateScore();
           };
           res.appendChild(btnW);
@@ -264,61 +252,57 @@
       }
     }
 
-    function checkAnswer() {
-      const input = document.getElementById("userInput").value.trim().toLowerCase();
-      const correct = data[index].romaji.toLowerCase();
-      if (input === correct) {
-        const e = data[index];
-        document.getElementById("result").innerHTML =
+    function checkAnswer(){
+      const input=document.getElementById("userInput").value.trim().toLowerCase();
+      const correct=data[index].romaji.toLowerCase();
+      if(input===correct){
+        const e=data[index];
+        document.getElementById("result").innerHTML=
           `<strong>Frase:</strong><br>${e.frase}<br><em>${e.traduzione[currentLang]}</em>`;
-        const spieg = { ...(e.spiegazioni || {}) };
-        ["wa","o","ni","to"].forEach(p => {
-          if (!spieg[p] && e.frase.includes(` ${p} `)) spieg[p] = spiegazioniGeneriche[p];
+        const spieg={...(e.spiegazioni||{})};
+        ["wa","o","ni","to"].forEach(p=>{
+          if(!spieg[p]&&e.frase.includes(` ${p} `)) spieg[p]=spiegazioniGeneriche[p];
         });
-        let html = "";
-        for (const k in spieg) {
-          const s = spieg[k];
-          html +=
-            `<div class="explanation"><strong>${k}</strong><br>` +
-            `<em><strong>Descrizione:</strong></em> ${s.descrizione[currentLang]}<br>` +
-            `<em><strong>Uso:</strong></em> ${s.uso[currentLang]}<br>` +
-            `<em><strong>Esempio:</strong></em> ${s.esempio[currentLang]}<br>` +
-            `<em><strong>Nota:</strong></em> ${s.nota[currentLang]}` +
-            (s.perche ? `<br><em><strong>${currentLang==='it'?'Perché':'Why'}:</strong></em> ${s.perche[currentLang]}` : "") +
+        let html="";
+        for(const k in spieg){
+          const s=spieg[k];
+          html+=
+            `<div class="explanation"><strong>${k}</strong><br>`+
+            `<em><strong>Descrizione:</strong></em> ${s.descrizione[currentLang]}<br>`+
+            `<em><strong>Uso:</strong></em> ${s.uso[currentLang]}<br>`+
+            `<em><strong>Esempio:</strong></em> ${s.esempio[currentLang]}<br>`+
+            `<em><strong>Nota:</strong></em> ${s.nota[currentLang]}`+
+            (s.perche?`<br><em><strong>${currentLang==='it'?'Perché':'Why'}:</strong></em> ${s.perche[currentLang]}`:"")+
             `</div>`;
         }
-        document.getElementById("spiegazioni").innerHTML = html;
+        document.getElementById("spiegazioni").innerHTML=html;
         score++; updateScore();
       } else {
-        document.getElementById("result").innerHTML =
-          `<span style="color:red;">✗ Risposta sbagliata. Riprova.</span>`;
+        document.getElementById("result").innerHTML=`<span style="color:red;">✗ Risposta sbagliata. Riprova.</span>`;
         wrongAnswers.push(data[index]);
       }
     }
 
-    function popolaSidebar() {
-      const sb = document.getElementById("paroleSidebar");
-      sb.innerHTML = "";
-      data.forEach(e => {
-        const trad = currentLang === 'it' ? e.italiano : e.inglese;
-        const li = document.createElement("li");
-        li.innerHTML = `<span class="blur">${e.romaji}</span> – <span class="translation">${trad}</span>`;
+    function popolaSidebar(){
+      const sb=document.getElementById("paroleSidebar");
+      sb.innerHTML="";
+      data.forEach(e=>{
+        const trad=currentLang==='it'?e.italiano:e.inglese;
+        const li=document.createElement("li");
+        li.innerHTML=`<span class="blur">${e.romaji}</span> – <span class="translation">${trad}</span>`;
         sb.appendChild(li);
       });
-      document.getElementById("conteggioParole").textContent =
-        currentLang === 'it'
-          ? `Totale: ${data.length} parole`
-          : `Total: ${data.length} words`;
+      document.getElementById("conteggioParole").textContent=
+        currentLang==='it'?`Totale: ${data.length} parole`:`Total: ${data.length} words`;
     }
 
-    // Ciclo di blur: 0=romaji,1=none,2=traduzione
-    function applyBlurState() {
-      document.querySelectorAll("#paroleSidebar li").forEach(li => {
-        const romaji = li.querySelector("span:first-of-type");
-        const trad   = li.querySelector("span.translation");
-        if (blurState === 0) {
+    function applyBlurState(){
+      document.querySelectorAll("#paroleSidebar li").forEach(li=>{
+        const romaji=li.querySelector("span:first-of-type");
+        const trad=li.querySelector("span.translation");
+        if(blurState===0){
           romaji.classList.add("blur"); trad.classList.remove("blur");
-        } else if (blurState === 1) {
+        } else if(blurState===1){
           romaji.classList.remove("blur"); trad.classList.remove("blur");
         } else {
           romaji.classList.remove("blur"); trad.classList.add("blur");
@@ -326,54 +310,42 @@
       });
     }
 
-    function startQuiz() {
-      document.getElementById("start-screen").style.display = "none";
-      document.getElementById("quiz-container").style.display = "flex";
+    function startQuiz(){
+      document.getElementById("start-screen").style.display="none";
+      document.getElementById("quiz-container").style.display="flex";
       loadQuestion(); popolaSidebar(); updateScore(); applyBlurState();
-
       document.getElementById("userInput")
-        .addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(); });
-
-      document.addEventListener("keydown", e => {
-        if (e.key === "Shift") {
-          blurState = (blurState + 1) % 3;
+        .addEventListener("keydown", e=>{ if(e.key==="Enter") checkAnswer(); });
+      document.addEventListener("keydown", e=>{
+        if(e.key==="Shift"){
+          blurState=(blurState+1)%3;
           applyBlurState();
         }
       });
     }
 
-    // ==== Initialization ====
-    document.addEventListener("DOMContentLoaded", () => {
-      // lingua
-      document.getElementById("lang-it").onclick = () => setLanguage("it");
-      document.getElementById("lang-en").onclick = () => setLanguage("en");
+    document.addEventListener("DOMContentLoaded", ()=>{
+      document.getElementById("lang-it").onclick=()=>setLanguage("it");
+      document.getElementById("lang-en").onclick=()=>setLanguage("en");
+
+      // tema salvato
+      const saved=localStorage.getItem("theme");
+      if(saved==="dark") document.body.classList.add("dark");
       aggiornaTestiStatici();
 
-      // theme toggle
-      const saved = localStorage.getItem("theme");
-      if (saved === "dark") document.body.classList.add("dark");
-      const themeBtn = document.getElementById("toggleThemeBtn");
-      themeBtn.addEventListener("click", toggleTheme);
-      // aggiorna testo theme
-      aggiornatenatext(); // ← piccolo helper per aggiornare solo i testi statici
-
-      // copia parole
-      document.getElementById("copyWordsBtn")
-        .addEventListener("click", () => {
-          const text = data.map(e =>
-            `${e.romaji} – ${ currentLang==='it'? e.italiano: e.inglese }`
-          ).join("\n");
-          if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(text).then(() =>
-              alert(labels[currentLang].copyWords + "!")
-            );
-          } else {
-            const ta = document.createElement("textarea");
-            ta.value = text; document.body.appendChild(ta);
-            ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
-            alert(labels[currentLang].copyWords + "!");
-          }
-        });
+      // event listeners
+      document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
+      document.getElementById("copyWordsBtn").addEventListener("click", ()=>{
+        const text = data.map(e=>`${e.romaji} – ${ currentLang==='it'? e.italiano:e.inglese }`).join("\n");
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          navigator.clipboard.writeText(text).then(()=>alert(labels[currentLang].copyWords+"!"));
+        } else {
+          const ta=document.createElement("textarea");
+          ta.value=text; document.body.appendChild(ta); ta.select();
+          document.execCommand("copy"); document.body.removeChild(ta);
+          alert(labels[currentLang].copyWords+"!");
+        }
+      });
     });
   </script>
 </body>
