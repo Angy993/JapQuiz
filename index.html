@@ -428,7 +428,7 @@ document.addEventListener("keydown", function(e) {
     lastShiftTime = now;
   }
 });
-document.addEventListener("keydown", function(event) {
+ddocument.addEventListener("keydown", function(event) {
     if (event.key === "ArrowRight") {
       index++;
       loadQuestion();
@@ -448,7 +448,9 @@ document.addEventListener("keydown", function(event) {
 
 document.addEventListener("keyup", function(e) {
   if (e.key === "Shift") {
-    document.querySelectorAll("#paroleSidebar span").forEach(el => el.classList.add("blur"));
+    document.querySelectorAll("#paroleSidebar .blur").forEach(el => {
+      if (!el.classList.contains("blur-traduzione")) {
+        el.classList.add("blur");
   }
 });
 function toggleTheme() {
