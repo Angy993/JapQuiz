@@ -1004,6 +1004,349 @@
     "inglese": "I rest (polite)",
     "frase": "Ashita yasumimasu.",
     "traduzione": { "it": "Domani mi riposerò.", "en": "I will rest tomorrow." }
+  },
+  {
+"romaji": "onna",
+  "italiano": "Donna",
+  "inglese": "Woman",
+  "frase": "Onna no hito desu.",
+  "traduzione": { "it": "È una donna.", "en": "She is a woman." }
+},
+{
+  "romaji": "otoko",
+  "italiano": "Uomo",
+  "inglese": "Man",
+  "frase": "Otoko no hito desu.",
+  "traduzione": { "it": "È un uomo.", "en": "He is a man." }
+},
+{
+  "romaji": "kodomo",
+  "italiano": "Bambino",
+  "inglese": "Child",
+  "frase": "Kodomo wa asobu.",
+  "traduzione": { "it": "Il bambino gioca.", "en": "The child plays." }
+},
+{
+  "romaji": "otona",
+  "italiano": "Adulto",
+  "inglese": "Adult",
+  "frase": "Otona wa shigoto o shimasu.",
+  "traduzione": { "it": "L'adulto lavora.", "en": "The adult works." }
+},
+{
+  "romaji": "kazoku",
+  "italiano": "Famiglia",
+  "inglese": "Family",
+  "frase": "Kazoku to tabemasu.",
+  "traduzione": { "it": "Mangio con la famiglia.", "en": "I eat with my family." }
+},
+{
+  "romaji": "haha",
+  "italiano": "Madre",
+  "inglese": "Mother",
+  "frase": "Haha to hanashimashita.",
+  "traduzione": { "it": "Ho parlato con mia madre.", "en": "I talked with my mother." }
+},
+{
+  "romaji": "chichi",
+  "italiano": "Padre",
+  "inglese": "Father",
+  "frase": "Chichi wa isha desu.",
+  "traduzione": { "it": "Mio padre è medico.", "en": "My father is a doctor." }
+},
+{
+  "romaji": "ani",
+  "italiano": "Fratello maggiore",
+  "inglese": "Older brother",
+  "frase": "Ani ga imasu.",
+  "traduzione": { "it": "Ho un fratello maggiore.", "en": "I have an older brother." }
+},
+{
+  "romaji": "ane",
+  "italiano": "Sorella maggiore",
+  "inglese": "Older sister",
+  "frase": "Ane to eiga o mimashita.",
+  "traduzione": { "it": "Ho visto un film con mia sorella maggiore.", "en": "I watched a movie with my older sister." }
+},
+{
+  "romaji": "otouto",
+  "italiano": "Fratello minore",
+  "inglese": "Younger brother",
+  "frase": "Otouto wa genki desu.",
+  "traduzione": { "it": "Mio fratello minore sta bene.", "en": "My younger brother is fine." }
+},
+{
+  "romaji": "imouto",
+  "italiano": "Sorella minore",
+  "inglese": "Younger sister",
+  "frase": "Imouto wa benkyou shite imasu.",
+  "traduzione": { "it": "Mia sorella minore studia.", "en": "My younger sister is studying." }
+},
+{
+  "romaji": "ofuro",
+  "italiano": "Bagno / Vasca",
+  "inglese": "Bath",
+  "frase": "Ofuro ni hairu.",
+  "traduzione": { "it": "Faccio il bagno.", "en": "I take a bath." }
+},
+{
+  "romaji": "kagu",
+  "italiano": "Mobili",
+  "inglese": "Furniture",
+  "frase": "Kagu o kau.",
+  "traduzione": { "it": "Compro i mobili.", "en": "I buy furniture." }
+},
+{
+  "romaji": "sofa",
+  "italiano": "Divano",
+  "inglese": "Sofa",
+  "frase": "Sofa ni suwaru.",
+  "traduzione": { "it": "Mi siedo sul divano.", "en": "I sit on the sofa." }
+},
+{
+  "romaji": "beddo",
+  "italiano": "Letto",
+  "inglese": "Bed",
+  "frase": "Beddo de nemasu.",
+  "traduzione": { "it": "Dormo nel letto.", "en": "I sleep on the bed." }
+},
+{
+  "romaji": "eki",
+  "italiano": "Stazione",
+  "inglese": "Station",
+  "frase": "Eki de machimasu.",
+  "traduzione": { "it": "Aspetto alla stazione.", "en": "I wait at the station." }
+},
+{
+  "romaji": "kippu",
+  "italiano": "Biglietto",
+  "inglese": "Ticket",
+  "frase": "Kippu o kaimasu.",
+  "traduzione": { "it": "Compro un biglietto.", "en": "I buy a ticket." }
+},
+{
+  "romaji": "jikanwari",
+  "italiano": "Orario (tabella)",
+  "inglese": "Timetable",
+  "frase": "Jikanwari o kakunin suru.",
+  "traduzione": { "it": "Controllo l'orario.", "en": "I check the timetable." }
+},
+{
+  "romaji": "noriba",
+  "italiano": "Fermata / Punto di partenza",
+  "inglese": "Stop / Platform",
+  "frase": "Noriba wa doko desu ka?",
+  "traduzione": { "it": "Dov'è la fermata?", "en": "Where is the stop?" }
+},
+{
+  "romaji": "hikouki",
+  "italiano": "Aereo",
+  "inglese": "Plane",
+  "frase": "Hikouki de ryokou suru.",
+  "traduzione": { "it": "Viaggio in aereo.", "en": "I travel by plane." }
+},
+{
+  "romaji": "kuukou",
+  "italiano": "Aeroporto",
+  "inglese": "Airport",
+  "frase": "Kuukou ni ikimasu.",
+  "traduzione": { "it": "Vado all'aeroporto.", "en": "I go to the airport." }
+},
+{
+  "romaji": "basu",
+  "italiano": "Autobus",
+  "inglese": "Bus",
+  "frase": "Basu ni noru.",
+  "traduzione": { "it": "Prendo l'autobus.", "en": "I take the bus." }
+},
+{
+  "romaji": "takushii",
+  "italiano": "Taxi",
+  "inglese": "Taxi",
+  "frase": "Takushii o yobu.",
+  "traduzione": { "it": "Chiamo un taxi.", "en": "I call a taxi." }
+},
+{
+  "romaji": "norikaeru",
+  "italiano": "Cambiare mezzo",
+  "inglese": "Transfer",
+  "frase": "Densha o norikaeru.",
+  "traduzione": { "it": "Cambio treno.", "en": "I transfer trains." }
+},
+{
+  "romaji": "osoku",
+  "italiano": "In ritardo / Tardi",
+  "inglese": "Late",
+  "frase": "Gakkou ni osoku naru.",
+  "traduzione": { "it": "Arrivo tardi a scuola.", "en": "I arrive late to school." }
+},
+{
+  "romaji": "hayaku",
+  "italiano": "Presto / Velocemente",
+  "inglese": "Early / Quickly",
+  "frase": "Hayaku hashiru.",
+  "traduzione": { "it": "Corro velocemente.", "en": "I run quickly." }
+},
+{
+  "romaji": "hoteru",
+  "italiano": "Hotel",
+  "inglese": "Hotel",
+  "frase": "Hoteru ni tomarimasu.",
+  "traduzione": { "it": "Mi fermo in un hotel.", "en": "I stay at a hotel." }
+},
+{
+  "romaji": "ryokan",
+  "italiano": "Locanda giapponese",
+  "inglese": "Ryokan",
+  "frase": "Ryokan ni tomarimasu.",
+  "traduzione": { "it": "Alloggio in un ryokan.", "en": "I stay at a ryokan." }
+},
+{
+  "romaji": "yoyaku",
+  "italiano": "Prenotazione",
+  "inglese": "Reservation",
+  "frase": "Yoyaku o toru.",
+  "traduzione": { "it": "Faccio una prenotazione.", "en": "I make a reservation." }
+},
+{
+  "romaji": "kyanseru",
+  "italiano": "Cancellazione",
+  "inglese": "Cancellation",
+  "frase": "Yoyaku o kyanseru suru.",
+  "traduzione": { "it": "Cancello la prenotazione.", "en": "I cancel the reservation." }
+},
+{
+  "romaji": "kagi",
+  "italiano": "Chiave",
+  "inglese": "Key",
+  "frase": "Kagi o nakushita.",
+  "traduzione": { "it": "Ho perso la chiave.", "en": "I lost the key." }
+},
+{
+  "romaji": "hako",
+  "italiano": "Scatola",
+  "inglese": "Box",
+  "frase": "Hako o hiraku.",
+  "traduzione": { "it": "Apro la scatola.", "en": "I open the box." }
+},
+{
+  "romaji": "nimotsu",
+  "italiano": "Bagaglio / Valigia",
+  "inglese": "Luggage",
+  "frase": "Nimotsu o motte iku.",
+  "traduzione": { "it": "Porto il bagaglio.", "en": "I carry the luggage." }
+},
+{
+  "romaji": "fukuro",
+  "italiano": "Sacchetto / Busta",
+  "ingleshe": "Bag",
+  "frase": "Fukuro o tsukau.",
+  "traduzione": { "it": "Uso un sacchetto.", "en": "I use a bag." }
+},
+{
+  "romaji": "kaimasu",
+  "italiano": "Comprare",
+  "inglese": "Buy",
+  "frase": "Pan o kaimasu.",
+  "traduzione": { "it": "Compro il pane.", "en": "I buy bread." }
+},
+{
+  "romaji": "uru",
+  "italiano": "Vendere",
+  "inglese": "Sell",
+  "frase": "Mise de ringo o urimasu.",
+  "traduzione": { "it": "Vendo mele nel negozio.", "en": "I sell apples in the store." }
+},
+{
+  "romaji": "mise",
+  "italiano": "Negozio",
+  "inglese": "Shop",
+  "frase": "Mise ni hairu.",
+  "traduzione": { "it": "Entro nel negozio.", "en": "I enter the shop." }
+},
+{
+  "romaji": "depaato",
+  "italiano": "Grande magazzino",
+  "inglese": "Department store",
+  "frase": "Depaato de kaimono suru.",
+  "traduzione": { "it": "Faccio shopping al grande magazzino.", "en": "I shop at the department store." }
+},
+{
+  "romaji": "konbini",
+  "italiano": "Minimarket",
+  "inglese": "Convenience store",
+  "frase": "Konbini de gohan o kau.",
+  "traduzione": { "it": "Compro cibo al minimarket.", "en": "I buy food at the convenience store." }
+},
+{
+  "romaji": "suupaa",
+  "italiano": "Supermercato",
+  "inglese": "Supermarket",
+  "frase": "Suupaa de yasai o kau.",
+  "traduzione": { "it": "Compro verdura al supermercato.", "en": "I buy vegetables at the supermarket." }
+},
+{
+  "romaji": "okane",
+  "italiano": "Soldi",
+  "inglese": "Money",
+  "frase": "Okane ga hoshii desu.",
+  "traduzione": { "it": "Voglio soldi.", "en": "I want money." }
+},
+{
+  "romaji": "reji",
+  "italiano": "Cassa (del negozio)",
+  "inglese": "Register",
+  "frase": "Reji de shiharau.",
+  "traduzione": { "it": "Pago alla cassa.", "en": "I pay at the register." }
+},
+{
+  "romaji": "taiyou",
+  "italiano": "Sole",
+  "inglese": "Sun",
+  "frase": "Taiyou ga kagayaku.",
+  "traduzione": { "it": "Il sole splende.", "en": "The sun is shining." }
+},
+{
+  "romaji": "hi",
+  "italiano": "Luce solare / Giorno",
+  "inglese": "Sunlight / Daylight",
+  "frase": "Hi ga tsuyoi desu.",
+  "traduzione": { "it": "La luce del sole è forte.", "en": "The sunlight is strong." }
+},
+{
+  "romaji": "nichiyoubi",
+  "italiano": "Domenica",
+  "inglese": "Sunday",
+  "frase": "Nichiyoubi ni eiga o miru.",
+  "traduzione": { "it": "Domenica guardo un film.", "en": "I watch a movie on Sunday." }
+},
+{
+  "romaji": "yasumitai",
+  "italiano": "Vorrei riposarmi",
+  "inglese": "Want to rest",
+  "frase": "Kyou wa yasumitai desu.",
+  "traduzione": { "it": "Oggi vorrei riposarmi.", "en": "I want to rest today." }
+},
+{
+  "romaji": "itakunai",
+  "italiano": "Non mi fa male",
+  "inglese": "Doesn't hurt",
+  "frase": "Atama ga itakunai desu.",
+  "traduzione": { "it": "Non mi fa male la testa.", "en": "My head doesn't hurt." }
+},
+{
+  "romaji": "yasunde",
+  "italiano": "Riposati (forma –te)",
+  "inglese": "Please rest (–te form)",
+  "frase": "Yoku yasunde kudasai.",
+  "traduzione": { "it": "Riposa bene, per favore.", "en": "Please rest well." }
+},
+{
+  "romaji": "yasumimasu",
+  "italiano": "Mi riposo (forma cortese)",
+  "inglese": "I rest (polite)",
+  "frase": "Ashita yasumimasu.",
+  "traduzione": { "it": "Domani mi riposerò.", "en": "I will rest tomorrow."
   }
 ];
 
