@@ -999,13 +999,6 @@
     "traduzione": { "it": "Riposa bene, per favore.", "en": "Please rest well." }
   },
   {
-    "romaji": "yasumimasu",
-    "italiano": "Mi riposo (forma cortese)",
-    "inglese": "I rest (polite)",
-    "frase": "Ashita yasumimasu.",
-    "traduzione": { "it": "Domani mi riposerò.", "en": "I will rest tomorrow." }
-  },
-  {
 "romaji": "onna",
   "italiano": "Donna",
   "inglese": "Woman",
@@ -1347,6 +1340,7 @@
   "inglese": "I rest (polite)",
   "frase": "Ashita yasumimasu.",
   "traduzione": { "it": "Domani mi riposerò.", "en": "I will rest tomorrow."
+    }
   }
 ];
 
