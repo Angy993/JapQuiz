@@ -1342,6 +1342,7 @@
   "traduzione": {
     "it": "Domani mi riposerò.",
     "en": "I will rest tomorrow."
+  }
 },
 {
   "romaji": "aruku",
@@ -1351,6 +1352,7 @@
   "traduzione": {
     "it": "Cammino nel parco.",
     "en": "I walk in the park."
+  }
 },
 {
   "romaji": "hashiru",
@@ -1362,7 +1364,6 @@
     "en": "I run every day."
   }
 }
-  ];
   
 
 const spiegazioniGeneriche = {
