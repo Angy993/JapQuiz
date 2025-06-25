@@ -1339,7 +1339,9 @@
   "italiano": "Mi riposo (forma cortese)",
   "inglese": "I rest (polite)",
   "frase": "Ashita yasumimasu.",
-  "traduzione": { "it": "Domani mi riposerò.", "en": "I will rest tomorrow."
+  "traduzione": {
+    "it": "Domani mi riposerò.",
+    "en": "I will rest tomorrow."
 },
 {
   "romaji": "aruku",
@@ -1358,9 +1360,10 @@
   "traduzione": {
     "it": "Corro ogni giorno.",
     "en": "I run every day."
-    }
   }
-];
+}
+  ];
+  
 
 const spiegazioniGeneriche = {
   "wa": {
