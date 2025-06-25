@@ -59,8 +59,12 @@
     .blur { filter:blur(5px); transition:filter 0.3s; cursor:pointer; }
     .blur:hover { filter:blur(0); }
     .version {
-      position:fixed; top:10px; left:20px; font-size:13px;
-      color:#888; font-style:italic;
+      position:fixed;
+      top:50px;       /* spostato in basso per non sovrapporsi */
+      left:20px;
+      font-size:13px;
+      color:#888;
+      font-style:italic;
     }
     .toggle-theme {
       position:fixed; top:10px; right:20px; font-size:16px;
@@ -73,6 +77,7 @@
 <body>
   <div class="version"></div>
   <button class="toggle-theme" id="toggleThemeBtn">Dark Mode</button>
+
   <div style="position:fixed; top:10px; right:160px; font-size:14px;">
     <span id="languageLabel">Lingua:</span>
     <span id="lang-it" style="cursor:pointer; margin:0 6px;">Italiano</span>|
@@ -106,9 +111,6 @@
     <div class="sidebar">
       <h3>Parole Imparate</h3>
       <button id="copyWordsBtn" style="font-size:14px; margin-bottom:10px;">Copia parole</button>
-      <button id="toggleBlurBtn" style="font-size:14px; margin-bottom:10px; margin-left:5px;">
-        Alterna blur
-      </button>
       <div id="conteggioParole" style="font-size:14px; margin-bottom:10px;"></div>
       <ul id="paroleSidebar"></ul>
     </div>
@@ -125,10 +127,9 @@
         verifyButton: "Verifica",
         inputPlaceholder: "Scrivi in romaji",
         copyWords: "Copia parole",
-        blurButton: "Alterna blur",
         languageLabel: "Lingua:",
         commandsTitle: "Comandi",
-        commandsText: "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta",
+        commandsText: "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta | Shift = Alterna blur",
         translate: "Traduci",
         restart: "Ricomincia da capo",
         retryWrong: "Ripeti solo quelle sbagliate",
@@ -145,10 +146,9 @@
         verifyButton: "Check",
         inputPlaceholder: "Type in romaji",
         copyWords: "Copy words",
-        blurButton: "Toggle blur",
         languageLabel: "Language:",
         commandsTitle: "Shortcuts",
-        commandsText: "Enter = Check | → = Next | ← = Back | Q = Skip",
+        commandsText: "Enter = Check | → = Next | ← = Back | Q = Skip | Shift = Toggle blur",
         translate: "Translate",
         restart: "Restart from beginning",
         retryWrong: "Repeat only wrong ones",
@@ -169,7 +169,6 @@
       document.getElementById("userInput").placeholder = l.inputPlaceholder;
       document.getElementById("verifyBtn").textContent = l.verifyButton;
       document.getElementById("copyWordsBtn").textContent = l.copyWords;
-      document.getElementById("toggleBlurBtn").textContent = l.blurButton;
       document.getElementById("languageLabel").textContent = l.languageLabel;
       document.getElementById("commandsContainer").innerHTML =
         `<strong>${l.commandsTitle}:</strong> ${l.commandsText}`;
@@ -298,33 +297,35 @@
       document.getElementById("start-screen").style.display = "none";
       document.getElementById("quiz-container").style.display = "flex";
       loadQuestion(); popolaSidebar(); updateScore(); applyBlurState();
-
       document.getElementById("userInput")
         .addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(); });
+      document.addEventListener("keydown", e => {
+        if (e.key === "Shift") {
+          blurState = (blurState + 1) % 3;
+          applyBlurState();
+        }
+      });
     }
 
     document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("lang-it").onclick = () => setLanguage("it");
       document.getElementById("lang-en").onclick = () => setLanguage("en");
-
       if (localStorage.getItem("theme") === "dark")
         document.body.classList.add("dark");
       aggiornaTestiStatici();
-
       document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
-
       document.getElementById("copyWordsBtn").addEventListener("click", () => {
         const text = data.map(e =>
           `${e.romaji} – ${ currentLang === 'it' ? e.italiano : e.inglese }`
         ).join("\n");
-        navigator.clipboard.writeText(text).then(() =>
-          alert(labels[currentLang].copyWords + "!")
-        );
-      });
-
-      document.getElementById("toggleBlurBtn").addEventListener("click", () => {
-        blurState = (blurState + 1) % 3;
-        applyBlurState();
+        navigator.clipboard?.writeText
+          ? navigator.clipboard.writeText(text).then(() => alert(labels[currentLang].copyWords + "!"))
+          : (() => {
+              const ta = document.createElement("textarea");
+              ta.value = text; document.body.appendChild(ta); ta.select();
+              document.execCommand("copy"); document.body.removeChild(ta);
+              alert(labels[currentLang].copyWords + "!");
+            })();
       });
     });
   </script>
