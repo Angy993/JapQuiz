@@ -328,8 +328,7 @@ const data = [
       "it": "Leggo un libro.",
       "en": "I read a book."
     }
-  }
-];
+  },
   {
     "romaji": "zasshi",
     "italiano": "Rivista",
