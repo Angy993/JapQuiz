@@ -1340,6 +1340,24 @@
   "inglese": "I rest (polite)",
   "frase": "Ashita yasumimasu.",
   "traduzione": { "it": "Domani mi riposerò.", "en": "I will rest tomorrow."
+},
+{
+  "romaji": "aruku",
+  "italiano": "Camminare",
+  "inglese": "Walk",
+  "frase": "Watashi wa kouen o aruku.",
+  "traduzione": {
+    "it": "Cammino nel parco.",
+    "en": "I walk in the park."
+},
+{
+  "romaji": "hashiru",
+  "italiano": "Correre",
+  "inglese": "Run",
+  "frase": "Mainichi hashirimasu.",
+  "traduzione": {
+    "it": "Corro ogni giorno.",
+    "en": "I run every day."
     }
   }
 ];
