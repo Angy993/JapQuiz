@@ -68,13 +68,6 @@
       background:var(--accent-color); color:white;
       border:none; cursor:pointer;
     }
-    .assistente-btn {
-      position:fixed; bottom:20px; right:20px;
-      background:var(--accent-color); color:white;
-      border:none; padding:10px 16px; font-size:16px;
-      border-radius:8px; cursor:pointer;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1); z-index:9999;
-    }
   </style>
 </head>
 <body>
@@ -121,8 +114,6 @@
     </div>
   </div>
 
-  <button class="assistente-btn" id="assistBtn" onclick="apriAssistente()">Assistente AI</button>
-
   <script src="new_romaji_quiz_data.js"></script>
   <script>
     // =============================
@@ -137,10 +128,9 @@
         verifyButton: "Verifica",
         inputPlaceholder: "Scrivi in romaji",
         copyWords: "Copia parole",
-        assistantButton: "Assistente AI",
         languageLabel: "Lingua:",
         commandsTitle: "Comandi",
-        commandsText: "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta | Shift = Alterna blur",
+        commandsText: "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta | Shift = Alterna blur",
         translate: "Traduci",
         restart: "Ricomincia da capo",
         retryWrong: "Ripeti solo quelle sbagliate",
@@ -157,10 +147,9 @@
         verifyButton: "Check",
         inputPlaceholder: "Type in romaji",
         copyWords: "Copy words",
-        assistantButton: "AI Assistant",
         languageLabel: "Language:",
         commandsTitle: "Shortcuts",
-        commandsText: "Enter = Check | → = Next | ← = Back | Q = Skip | Shift = Toggle blur",
+        commandsText: "Enter = Check | → = Next | ← = Back | Q = Skip | Shift = Toggle blur",
         translate: "Translate",
         restart: "Restart from beginning",
         retryWrong: "Repeat only wrong ones",
@@ -190,9 +179,8 @@
       document.getElementById("userInput").placeholder       = l.inputPlaceholder;
       document.getElementById("verifyBtn").textContent      = l.verifyButton;
 
-      // Copy & assistant
+      // Copy
       document.getElementById("copyWordsBtn").textContent   = l.copyWords;
-      document.getElementById("assistBtn").textContent      = l.assistantButton;
 
       // Language label
       document.getElementById("languageLabel").textContent  = l.languageLabel;
@@ -216,17 +204,6 @@
         document.body.classList.contains("dark") ? "dark" : "light"
       );
       aggiornaTestiStatici();
-    }
-
-    function apriAssistente() {
-      const w=420,h=600,
-            left=(window.innerWidth-w)/2,
-            top =(window.innerHeight-h)/2;
-      window.open(
-        "https://chat.openai.com",
-        "ChatGPT_Assistant",
-        `width=${w},height=${h},left=${left},top=${top},resizable=yes`
-      );
     }
 
     // ============================
