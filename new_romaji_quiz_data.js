@@ -588,7 +588,7 @@ const data = [
       "it": "Mi riposo sotto l’albero.",
       "en": "I rest under the tree."
     }
-  }
+  },
   {
     "romaji": "sora",
     "italiano": "Cielo",
@@ -848,7 +848,7 @@ const data = [
       "it": "È un libro vecchio.",
       "en": "It’s an old book."
     }
-  }
+  },
   {
     "romaji": "eki",
     "italiano": "Stazione",
