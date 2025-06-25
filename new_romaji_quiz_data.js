@@ -1362,9 +1362,9 @@
   "traduzione": {
     "it": "Corro ogni giorno.",
     "en": "I run every day."
-    }
-   }
- ];
+  }
+}
+];
   
 
 const spiegazioniGeneriche = {
