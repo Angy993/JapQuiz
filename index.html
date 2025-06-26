@@ -26,15 +26,36 @@
       color: var(--text-color);
       transition: background 0.3s, color 0.3s;
     }
-    .layout { display: flex; flex-wrap: wrap; max-width:1300px; margin:0 auto; padding:40px 20px; gap:30px; }
-    .container {
-      flex:1; background:var(--card-color);
-      border-radius:16px; box-shadow:0 4px 18px rgba(0,0,0,0.08);
-      padding:30px; max-height:80vh; overflow-y:auto;
+    .layout {
+      display: flex; flex-wrap: wrap; max-width:1300px;
+      margin:0 auto; padding:40px 20px; gap:30px;
     }
-    .quiz-title { font-size:30px; margin-bottom:25px; text-align:center; color:var(--accent-color); font-weight:600; }
-    .question { font-size:24px; text-align:center; margin-bottom:20px; }
-    .input-group { text-align:center; margin-bottom:20px; }
+    .container {
+      flex:1;
+      background:var(--card-color);
+      border-radius:16px;
+      box-shadow:0 4px 18px rgba(0,0,0,0.08);
+      padding:30px;
+      max-height:80vh;
+      overflow-y:auto;
+    }
+    .quiz-title {
+      font-size:30px; margin-bottom:8px;
+      text-align:center; color:var(--accent-color);
+      font-weight:600;
+    }
+    .version {
+      font-size:16px; color:var(--accent-color);
+      text-align:center; font-weight:bold;
+      margin-bottom:20px;
+    }
+    .question {
+      font-size:24px; text-align:center;
+      margin-bottom:20px;
+    }
+    .input-group {
+      text-align:center; margin-bottom:20px;
+    }
     input {
       font-size:20px; padding:12px 16px; width:240px;
       border:2px solid #dcdfe6; border-radius:10px;
@@ -63,16 +84,6 @@
     .sidebar li { margin-bottom:12px; }
     .blur { filter:blur(5px); transition:filter 0.3s; cursor:pointer; }
     .blur:hover { filter:blur(0); }
-    .version {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 16px;
-      color: var(--accent-color);
-      font-weight: bold;
-      z-index: 1000;
-    }
     .toggle-theme {
       position:fixed; top:10px; right:20px; font-size:16px;
       padding:6px 10px; border-radius:8px;
@@ -81,12 +92,11 @@
     }
     #lang-container {
       position:fixed; top:40px; right:20px; font-size:14px;
-      z-index: 1000;
+      z-index:1000;
     }
   </style>
 </head>
 <body>
-  <div class="version"></div>
   <button class="toggle-theme" id="toggleThemeBtn">Dark Mode</button>
   <div id="lang-container">
     <span id="languageLabel">Lingua:</span>
@@ -103,6 +113,8 @@
   <div class="layout" id="quiz-container" style="display:none;">
     <div class="container">
       <div class="quiz-title">Quiz di Romaji Giapponese</div>
+      <div class="version"></div>
+
       <div id="progress-bar" style="height:10px; background:#ddd; border-radius:8px; overflow:hidden; margin-bottom:15px;">
         <div id="progress-fill" style="height:100%; width:0%; background:var(--accent-color);"></div>
       </div>
@@ -208,25 +220,26 @@
       document.getElementById("startBtn").textContent = l.startButton;
       document.querySelector(".quiz-title").textContent = l.welcomeTitle;
       document.querySelector(".sidebar h3").textContent = l.learnedWords;
-      document.getElementById("userInput").placeholder = l.inputPlaceholder;
-      document.getElementById("verifyBtn").textContent   = l.verifyButton;
-      document.getElementById("nextBtn").textContent     = l.nextButton;
-      document.getElementById("copyWordsBtn").textContent= l.copyWords;
-      document.getElementById("toggleBlurBtn").textContent = l.toggleBlur;
-      document.getElementById("languageLabel").textContent = l.languageLabel;
+      document.getElementById("userInput").placeholder       = l.inputPlaceholder;
+      document.getElementById("verifyBtn").textContent      = l.verifyButton;
+      document.getElementById("nextBtn").textContent        = l.nextButton;
+      document.getElementById("copyWordsBtn").textContent   = l.copyWords;
+      document.getElementById("toggleBlurBtn").textContent  = l.toggleBlur;
+      document.getElementById("languageLabel").textContent  = l.languageLabel;
       document.getElementById("commandsContainer").innerHTML =
         `<strong>${l.commandsTitle}:</strong> ${l.commandsText}`;
+      updateScore();
       const themeBtn = document.getElementById("toggleThemeBtn");
       themeBtn.textContent = document.body.classList.contains("dark")
         ? l.themeLight : l.themeDark;
-      updateScore();
     }
 
     function setLanguage(lang){
       currentLang = lang;
       document.getElementById("lang-it").style.fontWeight = lang==='it'?"bold":"normal";
       document.getElementById("lang-en").style.fontWeight = lang==='en'?"bold":"normal";
-      aggiornaTestiStatici(); loadQuestion(); popolaSidebar(); applyBlurState();
+      aggiornaTestiStatici();
+      loadQuestion(); popolaSidebar(); applyBlurState();
     }
 
     function toggleTheme(){
@@ -244,7 +257,7 @@
       }
       document.getElementById("start-screen").style.display="none";
       document.getElementById("quiz-container").style.display="flex";
-      loadQuestion(); popolaSidebar(); updateScore(); applyBlurState();
+      loadQuestion(); popolaSidebar(); applyBlurState();
       document.getElementById("userInput")
         .addEventListener("keydown", e=>{ if(e.key==="Enter") checkAnswer(); });
       document.addEventListener("keydown", e=>{
