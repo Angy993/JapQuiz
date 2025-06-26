@@ -105,6 +105,7 @@
     <div class="sidebar">
       <h3>Parole Imparate</h3>
       <button id="copyWordsBtn" style="font-size:14px; margin-bottom:10px;">Copia parole</button>
+      <button id="toggleBlurBtn" style="font-size:14px; margin-bottom:10px; margin-left:5px;">Alterna blur</button>
       <div id="conteggioParole" style="font-size:14px; margin-bottom:10px;"></div>
       <ul id="paroleSidebar"></ul>
     </div>
@@ -119,9 +120,10 @@
         startButton: "Inizia il quiz",
         learnedWords: "Parole Imparate",
         verifyButton: "Verifica",
+        nextButton: "Avanti",
         inputPlaceholder: "Scrivi in romaji",
         copyWords: "Copia parole",
-        nextButton: "Avanti",
+        blurButton: "Alterna blur",
         languageLabel: "Lingua:",
         commandsTitle: "Comandi",
         commandsText: "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta",
@@ -129,7 +131,7 @@
         restart: "Ricomincia da capo",
         retryWrong: "Ripeti solo quelle sbagliate",
         completed: "Hai completato il quiz!",
-        finalScore: "Punteggio finale",
+        finalScore: "Punteggio",
         themeDark: "Modalità Scura",
         themeLight: "Modalità Chiara"
       },
@@ -139,9 +141,10 @@
         startButton: "Start the quiz",
         learnedWords: "Learned Words",
         verifyButton: "Check",
+        nextButton: "Next",
         inputPlaceholder: "Type in romaji",
         copyWords: "Copy words",
-        nextButton: "Next",
+        blurButton: "Toggle blur",
         languageLabel: "Language:",
         commandsTitle: "Shortcuts",
         commandsText: "Enter = Check | → = Next | ← = Back | Q = Skip",
@@ -149,27 +152,30 @@
         restart: "Restart from beginning",
         retryWrong: "Repeat only wrong ones",
         completed: "You’ve completed the quiz!",
-        finalScore: "Final score",
+        finalScore: "Score",
         themeDark: "Dark Mode",
         themeLight: "Light Mode"
       }
     };
 
-    // Popola tutti i testi dinamici
     function aggiornaTestiStatici() {
       const l = labels[currentLang];
+      // start screen
       document.querySelector("#start-screen h1").textContent = l.welcomeTitle;
       document.querySelector("#start-screen p").textContent = l.welcomeText;
       document.getElementById("startBtn").textContent = l.startButton;
-      document.querySelector(".quiz-title").textContent = l.welcomeTitle;
-      document.querySelector(".sidebar h3").textContent = l.learnedWords;
-      document.getElementById("verifyBtn").textContent = l.verifyButton;
-      document.getElementById("nextBtn").textContent   = l.nextButton;
-      document.getElementById("userInput").placeholder = l.inputPlaceholder;
-      document.getElementById("copyWordsBtn").textContent = l.copyWords;
-      document.getElementById("languageLabel").textContent = l.languageLabel;
+      // quiz & sidebar
+      document.querySelector(".quiz-title").textContent       = l.welcomeTitle;
+      document.querySelector(".sidebar h3").textContent      = l.learnedWords;
+      document.getElementById("verifyBtn").textContent      = l.verifyButton;
+      document.getElementById("nextBtn").textContent        = l.nextButton;
+      document.getElementById("userInput").placeholder      = l.inputPlaceholder;
+      document.getElementById("copyWordsBtn").textContent   = l.copyWords;
+      document.getElementById("toggleBlurBtn").textContent  = l.blurButton;
+      document.getElementById("languageLabel").textContent  = l.languageLabel;
       document.getElementById("commandsContainer").innerHTML =
         `<strong>${l.commandsTitle}:</strong> ${l.commandsText}`;
+      document.querySelector(".version").innerText = `${l.finalScore}: ${score}`;
       document.getElementById("toggleThemeBtn").textContent =
         document.body.classList.contains("dark") ? l.themeLight : l.themeDark;
     }
@@ -180,15 +186,10 @@
       aggiornaTestiStatici();
     }
 
-    let currentLang = 'it',
-        index       = 0,
-        score       = 0,
-        wrongAnswers= [];
+    let currentLang='it', index=0, score=0, wrongAnswers=[], blurState=0;
 
     function updateScore() {
-      // Mostra il punteggio nella div.version
-      const label = labels[currentLang].finalScore;
-      document.querySelector(".version").innerText = `${label}: ${score}`;
+      aggiornaTestiStatici();
     }
 
     function setLanguage(lang) {
@@ -198,7 +199,6 @@
       aggiornaTestiStatici();
       loadQuestion();
       popolaSidebar();
-      updateScore();
     }
 
     function loadQuestion() {
@@ -215,9 +215,8 @@
       if (index < data.length) {
         document.getElementById("question").innerHTML =
           `<strong>${labels[currentLang].translate}:</strong> ` +
-          data[index][ currentLang==='it' ? "italiano" : "inglese" ];
+          data[index][ currentLang==='it'?"italiano":"inglese" ];
       } else {
-        // fine quiz
         document.getElementById("question").textContent = labels[currentLang].completed;
         document.getElementById("progress-text").textContent =
           `${labels[currentLang].finalScore}: ${score} / ${data.length}`;
@@ -226,15 +225,15 @@
         const res = document.getElementById("result");
         const btnR = document.createElement("button");
         btnR.textContent = labels[currentLang].restart;
-        btnR.onclick = () => location.reload();
+        btnR.onclick = ()=>location.reload();
         res.appendChild(btnR);
         if (wrongAnswers.length) {
           const btnW = document.createElement("button");
           btnW.textContent = labels[currentLang].retryWrong;
-          btnW.onclick = () => {
+          btnW.onclick = ()=>{
             data = [...wrongAnswers];
-            index = 0; score = 0; wrongAnswers = [];
-            document.querySelector(".input-group").style.display = "block";
+            index=0; score=0; wrongAnswers=[];
+            document.querySelector(".input-group").style.display="block";
             loadQuestion(); updateScore();
           };
           res.appendChild(btnW);
@@ -245,23 +244,20 @@
     function checkAnswer() {
       const input   = document.getElementById("userInput").value.trim().toLowerCase();
       const correct = data[index].romaji.toLowerCase();
-      const verifyBtn = document.getElementById("verifyBtn");
-      const nextBtn   = document.getElementById("nextBtn");
-
       if (input === correct) {
         const e = data[index];
         document.getElementById("result").innerHTML =
           `<strong>Frase:</strong><br>${e.frase}<br><em>${e.traduzione[currentLang]}</em>`;
-        // costruisci spiegazioni...
+        // generazione spiegazioni
         const spieg = { ...(e.spiegazioni||{}) };
-        ["wa","o","ni","to"].forEach(p => {
+        ["wa","o","ni","to"].forEach(p=>{
           if (!spieg[p] && e.frase.includes(` ${p} `))
             spieg[p] = spiegazioniGeneriche[p];
         });
-        let html = "";
-        for (const k in spieg) {
-          const s = spieg[k];
-          html +=
+        let html="";
+        for(const k in spieg){
+          const s=spieg[k];
+          html+=
             `<div class="explanation"><strong>${k}</strong><br>`+
             `<em><strong>Descrizione:</strong></em> ${s.descrizione[currentLang]}<br>`+
             `<em><strong>Uso:</strong></em> ${s.uso[currentLang]}<br>`+
@@ -271,12 +267,9 @@
             `</div>`;
         }
         document.getElementById("spiegazioni").innerHTML = html;
-
         score++; updateScore();
-
-        // disabilita verifica e mostra Avanti
-        verifyBtn.disabled = true;
-        nextBtn.style.display = "inline-block";
+        document.getElementById("verifyBtn").disabled = true;
+        document.getElementById("nextBtn").style.display = "inline-block";
       } else {
         document.getElementById("result").innerHTML =
           `<span style="color:red;">✗ Risposta sbagliata. Riprova.</span>`;
@@ -290,11 +283,11 @@
       popolaSidebar();
     }
 
-    function popolaSidebar() {
+    function popolaSidebar(){
       const sb = document.getElementById("paroleSidebar");
       sb.innerHTML = "";
-      data.forEach(e => {
-        const trad = currentLang==='it' ? e.italiano : e.inglese;
+      data.forEach(e=>{
+        const trad = currentLang==='it'? e.italiano : e.inglese;
         const li = document.createElement("li");
         li.innerHTML = `<span class="blur">${e.romaji}</span> – <span class="translation">${trad}</span>`;
         sb.appendChild(li);
@@ -303,46 +296,56 @@
         currentLang==='it'
           ? `Totale: ${data.length} parole`
           : `Total: ${data.length} words`;
+      applyBlurState();
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      // start
-      document.getElementById("lang-it").onclick = () => setLanguage("it");
-      document.getElementById("lang-en").onclick = () => setLanguage("en");
-      if (localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
+    function applyBlurState(){
+      document.querySelectorAll("#paroleSidebar li").forEach(li=>{
+        const romaji = li.querySelector("span:first-of-type");
+        const trad   = li.querySelector("span.translation");
+        if(blurState===0){
+          romaji.classList.add("blur"); trad.classList.remove("blur");
+        } else if(blurState===1){
+          romaji.classList.remove("blur"); trad.classList.remove("blur");
+        } else {
+          romaji.classList.remove("blur"); trad.classList.add("blur");
+        }
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded",()=>{
+      // lingua
+      document.getElementById("lang-it").onclick = ()=>setLanguage("it");
+      document.getElementById("lang-en").onclick = ()=>setLanguage("en");
+      // tema
+      if(localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
       aggiornaTestiStatici();
-      document.getElementById("startBtn").onclick = () => {
-        document.getElementById("start-screen").style.display   = "none";
-        document.getElementById("quiz-container").style.display = "flex";
+      // start
+      document.getElementById("startBtn").onclick = ()=>{
+        document.getElementById("start-screen").style.display="none";
+        document.getElementById("quiz-container").style.display="flex";
         loadQuestion(); popolaSidebar(); updateScore();
       };
+      // bottoni
       document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
       document.getElementById("verifyBtn").addEventListener("click", checkAnswer);
       document.getElementById("nextBtn").addEventListener("click", goNext);
-      document.getElementById("copyWordsBtn").addEventListener("click", () => {
-        const text = data.map(e =>
-          `${e.romaji} – ${ currentLang==='it' ? e.italiano : e.inglese }`
-        ).join("\n");
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(text).then(()=>alert(labels[currentLang].copyWords+"!"));
-        } else {
-          const ta = document.createElement("textarea");
-          ta.value=text; document.body.appendChild(ta); ta.select();
-          document.execCommand("copy"); document.body.removeChild(ta);
+      document.getElementById("copyWordsBtn").addEventListener("click", ()=>{
+        const text = data.map(e=>`${e.romaji} – ${ currentLang==='it'? e.italiano : e.inglese}`).join("\n");
+        if(navigator.clipboard) navigator.clipboard.writeText(text).then(()=>alert(labels[currentLang].copyWords+"!"));
+        else {
+          const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta);
+          ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
           alert(labels[currentLang].copyWords+"!");
         }
       });
-      // invio = verifica
-      document.getElementById("userInput").addEventListener("keydown", e => {
-        if (e.key==="Enter" && !document.getElementById("verifyBtn").disabled)
-          checkAnswer();
+      document.getElementById("toggleBlurBtn").addEventListener("click", ()=>{
+        blurState = (blurState+1)%3;
+        applyBlurState();
       });
-      // shift = toggle blur (come prima)
-      document.addEventListener("keydown", e => {
-        if (e.key==="Shift") {
-          blurState = (blurState+1)%3;
-          applyBlurState();
-        }
+      // invio = verifica
+      document.getElementById("userInput").addEventListener("keydown", e=>{
+        if(e.key==="Enter" && !document.getElementById("verifyBtn").disabled) checkAnswer();
       });
     });
   </script>
