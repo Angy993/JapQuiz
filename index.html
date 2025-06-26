@@ -323,7 +323,8 @@
             `<div class="explanation"><strong>${k}</strong><br>`+
             `<em><strong>${EL.descr}:</strong></em> ${s.descrizione[currentLang]}<br>`+
             `<em><strong>${EL.uso}:</strong></em> ${s.uso[currentLang]}<br>`+
-            `<em><strong>${EL.esempio}:</strong></em> ${s.esempio[currentLang]}<br>`+
+            // QUI prendiamo sempre l'esempio in romaji:
+            `<em><strong>${EL.esempio}:</strong></em> ${s.esempio.it}<br>`+
             `<em><strong>${EL.nota}:</strong></em> ${s.nota[currentLang]}`+
             (s.perche?`<br><em><strong>${EL.perche}:</strong></em> ${s.perche[currentLang]}`:"")+
             `</div>`;
