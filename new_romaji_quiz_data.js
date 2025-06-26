@@ -663,13 +663,6 @@
     "traduzione": { "it": "Mi prendo cura del corpo.", "en": "I take care of my body." }
   },
   {
-    "romaji": "onna",
-    "italiano": "Donna",
-    "inglese": "Woman",
-    "frase": "Onna no hito desu.",
-    "traduzione": { "it": "È una donna.", "en": "She is a woman." }
-  },
-  {
     "romaji": "otoko",
     "italiano": "Uomo",
     "inglese": "Man",
