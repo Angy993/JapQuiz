@@ -31,6 +31,7 @@
       top: 10px;
       left: 20px;
       font-size: 14px;
+      z-index: 1000;
     }
     header span { margin-right: 12px; }
     .toggle-theme {
@@ -48,7 +49,7 @@
     .layout {
       display: flex; flex-wrap: wrap;
       max-width: 1300px; margin: 0 auto;
-      padding: 40px 20px; gap: 30px;
+      padding: 80px 20px 40px; gap: 30px;
     }
     .container {
       flex: 1;
@@ -56,7 +57,6 @@
       border-radius: 16px;
       box-shadow: 0 4px 18px rgba(0,0,0,0.08);
       padding: 30px;
-      position: relative;
     }
     .quiz-title {
       font-size: 30px; margin-bottom: 25px;
@@ -93,27 +93,30 @@
     .sidebar li { margin-bottom: 12px; }
     .blur { filter: blur(5px); transition: filter 0.3s; cursor: pointer; }
     .blur:hover { filter: blur(0); }
+    #nextBtn { margin-left: 0; margin-top: 10px; }
   </style>
 </head>
 <body>
   <header>
     <span id="scoreDisplay"></span>
     <span id="languageLabel">Lingua:</span>
-    <span id="lang-it" style="cursor:pointer; margin:0 6px;">Italiano</span>|
-    <span id="lang-en" style="cursor:pointer; margin:0 6px;">Inglese</span>
+    <span id="lang-it" style="cursor:pointer; font-weight:bold">Italiano</span> |
+    <span id="lang-en" style="cursor:pointer">Inglese</span>
   </header>
 
   <button class="toggle-theme" id="toggleThemeBtn">Modalità Scura</button>
 
   <div id="start-screen" style="text-align:center; padding:100px 20px;">
-    <h1>Benvenuto al Quiz di Romaji</h1>
-    <p>Metti alla prova la tua conoscenza del giapponese!</p>
-    <button id="startBtn" style="font-size:18px; padding:12px 24px;">Inizia il quiz</button>
+    <h1 id="welcomeTitle">Benvenuto al Quiz di Romaji</h1>
+    <p id="welcomeText">Metti alla prova la tua conoscenza del giapponese!</p>
+    <button id="startBtn" onclick="startQuiz()" style="font-size:18px; padding:12px 24px;">
+      Inizia il quiz
+    </button>
   </div>
 
   <div class="layout" id="quiz-container" style="display:none;">
     <div class="container">
-      <div class="quiz-title">Quiz di Romaji Giapponese</div>
+      <div class="quiz-title" id="quizTitle">Quiz di Romaji Giapponese</div>
       <div id="progress-bar" style="height:10px; background:#ddd; border-radius:8px; overflow:hidden; margin-bottom:15px;">
         <div id="progress-fill" style="height:100%; width:0%; background:var(--accent-color);"></div>
       </div>
@@ -128,8 +131,9 @@
       <div class="result" id="result"></div>
       <div id="spiegazioni"></div>
     </div>
+
     <div class="sidebar">
-      <h3>Parole Imparate</h3>
+      <h3 id="sidebarTitle">Parole Imparate</h3>
       <button id="copyWordsBtn" style="font-size:14px; margin-bottom:10px;">Copia parole</button>
       <button id="toggleBlurBtn" style="font-size:14px; margin-bottom:10px;">Toggle Blur</button>
       <div id="conteggioParole" style="font-size:14px; margin-bottom:10px;"></div>
@@ -137,92 +141,62 @@
     </div>
   </div>
 
+  <!-- dati esterni con array `data` -->
   <script src="new_romaji_quiz_data.js"></script>
   <script>
-    // =============================
-    // Tutti i testi per le lingue
-    // =============================
     const labels = {
       it: {
+        scoreLabel: "Punteggio",
         welcomeTitle: "Benvenuto al Quiz di Romaji",
         welcomeText: "Metti alla prova la tua conoscenza del giapponese!",
         startButton: "Inizia il quiz",
+        quizTitle: "Quiz di Romaji Giapponese",
         learnedWords: "Parole Imparate",
         verifyButton: "Verifica",
+        nextButton: "Avanti",
         inputPlaceholder: "Scrivi in romaji",
         copyWords: "Copia parole",
+        toggleBlur: "Toggle Blur",
         languageLabel: "Lingua:",
         commandsTitle: "Comandi",
-        commandsText: "Invio = Verifica | Avanti = → | Blur = Toggle Blur",
+        commandsText: "Invio = Verifica | Q = Salta",
         translate: "Traduci",
         restart: "Ricomincia da capo",
         retryWrong: "Ripeti solo quelle sbagliate",
         completed: "Hai completato il quiz!",
         finalScore: "Punteggio finale",
         themeDark: "Modalità Scura",
-        themeLight: "Modalità Chiara",
-        scoreLabel: "Punteggio"
+        themeLight: "Modalità Chiara"
       },
       en: {
+        scoreLabel: "Score",
         welcomeTitle: "Welcome to the Romaji Quiz",
         welcomeText: "Test your knowledge of Japanese!",
         startButton: "Start the quiz",
+        quizTitle: "Romaji Japanese Quiz",
         learnedWords: "Learned Words",
         verifyButton: "Check",
+        nextButton: "Next",
         inputPlaceholder: "Type in romaji",
         copyWords: "Copy words",
+        toggleBlur: "Toggle Blur",
         languageLabel: "Language:",
         commandsTitle: "Shortcuts",
-        commandsText: "Enter = Check | Next = → | Blur = Toggle Blur",
+        commandsText: "Enter = Check | Q = Skip",
         translate: "Translate",
         restart: "Restart from beginning",
         retryWrong: "Repeat only wrong ones",
         completed: "You’ve completed the quiz!",
         finalScore: "Final score",
         themeDark: "Dark Mode",
-        themeLight: "Light Mode",
-        scoreLabel: "Score"
+        themeLight: "Light Mode"
       }
     };
 
-    // =============================
-    // Particelle generiche
-    // =============================
-    const spiegazioniGeneriche = {
-      "wa": {
-        descrizione: { it: "Particella del tema.", en: "Topic particle." },
-        uso: { it: "Indica il soggetto della frase.", en: "Marks the topic of the sentence." },
-        esempio: { it: "Watashi wa gakusei desu.", en: "I am a student." },
-        nota: { it: "Si scrive は ma si legge 'wa'.", en: "Written as は but pronounced 'wa'." },
-        perche: { it: "Watashi è il soggetto che compie l'azione.", en: "Watashi is the one performing the action." }
-      },
-      "o": {
-        descrizione: { it: "Particella dell’oggetto diretto.", en: "Direct object particle." },
-        uso: { it: "Introduce ciò che subisce l'azione.", en: "Marks what receives the action." },
-        esempio: { it: "Ringo o taberu.", en: "I eat an apple." },
-        nota: { it: "Si scrive を ma si legge 'o'.", en: "Written as を but pronounced 'o'." },
-        perche: { it: "L'oggetto che viene mangiato, guardato, ecc.", en: "The object being eaten, watched, etc." }
-      },
-      "ni": {
-        descrizione: { it: "Particella di destinazione o tempo.", en: "Direction or time particle." },
-        uso: { it: "Indica dove si va o quando.", en: "Indicates direction or time." },
-        esempio: { it: "Gakkou ni iku.", en: "I go to school." },
-        nota: { it: "Può indicare direzione, tempo o destinatario.", en: "Can mark direction, time, or recipient." },
-        perche: { it: "Serve per indicare la destinazione o il tempo.", en: "Used for destination or time indication." }
-      },
-      "to": {
-        descrizione: { it: "Particella connettiva (con).", en: "Connecting particle (with)." },
-        uso: { it: "Usata per indicare compagnia.", en: "Used to show companionship." },
-        esempio: { it: "Tomodachi to hanasu.", en: "I speak with a friend." },
-        nota: { it: "Collega due elementi o persone.", en: "Connects two elements or people." },
-        perche: { it: "Indica con chi si svolge l’azione.", en: "Shows with whom the action is done." }
-      }
-    };
+    let currentLang = 'it';
+    let index = 0, score = 0, wrongAnswers = [], blurState = 0;
 
-    // =============================
-    // Utility: shuffle array
-    // =============================
-    function shuffle(a) {
+    function shuffleArray(a) {
       for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
@@ -230,105 +204,79 @@
       return a;
     }
 
-    // =============================
-    // Variabili globali
-    // =============================
-    let currentLang = 'it',
-        index = 0,
-        score = 0,
-        wrongAnswers = [],
-        blurState = 0;
-
-    // Cloniamo i dati originali e li manteniamo separati
-    const originalData = JSON.parse(JSON.stringify(data));
-    let questions = [];
-
-    // =============================
-    // Funzioni di setup e internaz.
-    // =============================
     function aggiornaTestiStatici() {
       const l = labels[currentLang];
-      document.querySelector("#start-screen h1").textContent = l.welcomeTitle;
-      document.querySelector("#start-screen p").textContent = l.welcomeText;
-      document.getElementById("startBtn").textContent = l.startButton;
-      document.querySelector(".quiz-title").textContent = l.welcomeTitle;
-      document.querySelector(".sidebar h3").textContent = l.learnedWords;
-      document.getElementById("userInput").placeholder = l.inputPlaceholder;
-      document.getElementById("verifyBtn").textContent = l.verifyButton;
-      document.getElementById("copyWordsBtn").textContent = l.copyWords;
-      document.getElementById("toggleBlurBtn").textContent = "Blur";
-      document.getElementById("languageLabel").textContent = l.languageLabel;
-      document.getElementById("commandsContainer").innerHTML =
+      document.getElementById('scoreDisplay').textContent = `${l.scoreLabel}: ${score}`;
+      document.getElementById('welcomeTitle').textContent = l.welcomeTitle;
+      document.getElementById('welcomeText').textContent = l.welcomeText;
+      document.getElementById('startBtn').textContent = l.startButton;
+      document.getElementById('quizTitle').textContent = l.quizTitle;
+      document.getElementById('sidebarTitle').textContent = l.learnedWords;
+      document.getElementById('verifyBtn').textContent = l.verifyButton;
+      document.getElementById('nextBtn').textContent = l.nextButton;
+      document.getElementById('userInput').placeholder = l.inputPlaceholder;
+      document.getElementById('copyWordsBtn').textContent = l.copyWords;
+      document.getElementById('toggleBlurBtn').textContent = l.toggleBlur;
+      document.getElementById('languageLabel').textContent = l.languageLabel;
+      document.getElementById('commandsContainer').innerHTML =
         `<strong>${l.commandsTitle}:</strong> ${l.commandsText}`;
-      document.getElementById("toggleThemeBtn").textContent =
-        document.body.classList.contains("dark") ? l.themeLight : l.themeDark;
-      updateScore();
+      const themeBtn = document.getElementById('toggleThemeBtn');
+      themeBtn.textContent = document.body.classList.contains('dark') ? l.themeLight : l.themeDark;
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+      aggiornaTestiStatici();
+    }
+
+    function updateScore() {
+      document.getElementById('scoreDisplay').textContent =
+        `${labels[currentLang].scoreLabel}: ${score}`;
     }
 
     function setLanguage(lang) {
       currentLang = lang;
-      document.getElementById("lang-it").style.fontWeight = lang==='it'?"bold":"normal";
-      document.getElementById("lang-en").style.fontWeight = lang==='en'?"bold":"normal";
+      document.getElementById('lang-it').style.fontWeight = (lang==='it'?'bold':'normal');
+      document.getElementById('lang-en').style.fontWeight = (lang==='en'?'bold':'normal');
       aggiornaTestiStatici();
       loadQuestion();
       popolaSidebar();
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
-      localStorage.setItem("theme",
-        document.body.classList.contains("dark") ? "dark" : "light"
-      );
-      aggiornaTestiStatici();
-    }
-
-    // =============================
-    // Funzioni core del quiz
-    // =============================
-    function updateScore() {
-      document.getElementById("scoreDisplay").textContent =
-        `${labels[currentLang].scoreLabel}: ${score}`;
+      applyBlurState();
     }
 
     function loadQuestion() {
-      document.getElementById("userInput").value = "";
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("spiegazioni").innerHTML = "";
+      document.getElementById('userInput').value = '';
+      document.getElementById('result').innerHTML = '';
+      document.getElementById('spiegazioni').innerHTML = '';
+      document.getElementById('nextBtn').style.display = 'none';
+      const pct = Math.round((index / data.length) * 100);
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-text').textContent =
+        `${index+1} / ${data.length}`;
 
-      // progress bar e testo
-      const pct = Math.round((index / questions.length) * 100);
-      document.getElementById("progress-fill").style.width = pct + "%";
-      document.getElementById("progress-text").textContent =
-        `${index+1} / ${questions.length}`;
-
-      // mostro/nascondo i bottoni
-      document.getElementById("verifyBtn").style.display = index < questions.length ? "inline-block" : "none";
-      document.getElementById("nextBtn").style.display   = "none";
-
-      if (index < questions.length) {
-        document.getElementById("question").innerHTML =
+      if (index < data.length) {
+        document.getElementById('question').innerHTML =
           `<strong>${labels[currentLang].translate}:</strong> ` +
-          questions[index][ currentLang==='it'?"italiano":"inglese" ];
+          data[index][ currentLang==='it' ? 'italiano' : 'inglese' ];
       } else {
-        // fine quiz
-        document.getElementById("question").textContent = labels[currentLang].completed;
-        document.getElementById("progress-text").textContent =
-          `${labels[currentLang].finalScore}: ${score} / ${questions.length}`;
-        document.querySelector(".input-group").style.display = "none";
-
-        const res = document.getElementById("result");
-        const btnR = document.createElement("button");
+        document.getElementById('question').textContent = labels[currentLang].completed;
+        document.getElementById('progress-text').textContent =
+          `${labels[currentLang].finalScore}: ${score} / ${data.length}`;
+        document.getElementById('progress-fill').style.width = '100%';
+        document.querySelector('.input-group').style.display = 'none';
+        const res = document.getElementById('result');
+        const btnR = document.createElement('button');
         btnR.textContent = labels[currentLang].restart;
-        btnR.onclick = () => location.reload();
+        btnR.onclick = ()=> location.reload();
         res.appendChild(btnR);
-
         if (wrongAnswers.length) {
-          const btnW = document.createElement("button");
+          const btnW = document.createElement('button');
           btnW.textContent = labels[currentLang].retryWrong;
-          btnW.onclick = () => {
-            questions = [...wrongAnswers];
+          btnW.onclick = ()=>{
+            data = [...wrongAnswers];
             index = 0; score = 0; wrongAnswers = [];
-            document.querySelector(".input-group").style.display = "block";
+            document.querySelector('.input-group').style.display = 'block';
             loadQuestion(); updateScore();
           };
           res.appendChild(btnW);
@@ -337,127 +285,119 @@
     }
 
     function checkAnswer() {
-      const input = document.getElementById("userInput").value.trim().toLowerCase();
-      const correct = questions[index].romaji.toLowerCase();
-
+      const input = document.getElementById('userInput').value.trim().toLowerCase();
+      const correct = data[index].romaji.toLowerCase();
       if (input === correct) {
-        // risposta esatta
-        const e = questions[index];
-        document.getElementById("result").innerHTML =
-          `<strong>Frase:</strong><br>${e.frase}<br>` +
+        const e = data[index];
+        document.getElementById('result').innerHTML =
+          `<strong>Frase:</strong><br>${e.frase}<br>`+
           `<em>${e.traduzione[currentLang]}</em>`;
-
-        // generiamo spiegazioni automatiche
+        // spiegazioni...
         const spieg = { ...(e.spiegazioni||{}) };
-        ["wa","o","ni","to"].forEach(p => {
+        ['wa','o','ni','to'].forEach(p=>{
           if (!spieg[p] && e.frase.includes(` ${p} `))
             spieg[p] = spiegazioniGeneriche[p];
         });
-
-        let html = "";
+        let html = '';
         for (const k in spieg) {
           const s = spieg[k];
           html +=
-            `<div class="explanation"><strong>${k}</strong><br>` +
-            `<em><strong>Descrizione:</strong></em> ${s.descrizione[currentLang]}<br>` +
-            `<em><strong>Uso:</strong></em> ${s.uso[currentLang]}<br>` +
-            `<em><strong>Esempio:</strong></em> ${s.esempio[currentLang]}<br>` +
-            `<em><strong>Nota:</strong></em> ${s.nota[currentLang]}` +
-            (s.perche
-              ? `<br><em><strong>${currentLang==='it'?'Perché':'Why'}:</strong></em> ${s.perche[currentLang]}`
-              : ""
-            ) +
+            `<div class="explanation"><strong>${k}</strong><br>`+
+            `<em><strong>Descrizione:</strong></em> ${s.descrizione[currentLang]}<br>`+
+            `<em><strong>Uso:</strong></em> ${s.uso[currentLang]}<br>`+
+            `<em><strong>Esempio:</strong></em> ${s.esempio[currentLang]}<br>`+
+            `<em><strong>Nota:</strong></em> ${s.nota[currentLang]}`+
+            (s.perche?`<br><em><strong>${currentLang==='it'?'Perché':'Why'}:</strong></em> ${s.perche[currentLang]}`:'')+
             `</div>`;
         }
-        document.getElementById("spiegazioni").innerHTML = html;
-
+        document.getElementById('spiegazioni').innerHTML = html;
         score++; updateScore();
+        document.getElementById('nextBtn').style.display = 'inline-block';
       } else {
-        // sbagliata
-        document.getElementById("result").innerHTML =
-          `<span style="color:red;">✗ ${currentLang==='it'?"Risposta sbagliata":"Wrong answer"}. ${currentLang==='it'?"Riprova":"Try again"}.</span>`;
-        wrongAnswers.push(questions[index]);
+        document.getElementById('result').innerHTML =
+          `<span style="color:red;">✗ Risposta sbagliata. Riprova.</span>`;
+        wrongAnswers.push(data[index]);
       }
-
-      // mostra il bottone Avanti
-      document.getElementById("verifyBtn").style.display = "none";
-      document.getElementById("nextBtn").style.display = "inline-block";
     }
 
     function popolaSidebar() {
-      const sb = document.getElementById("paroleSidebar");
-      sb.innerHTML = "";
-      questions.forEach(e => {
-        const trad = currentLang==='it' ? e.italiano : e.inglese;
-        const li = document.createElement("li");
+      const sb = document.getElementById('paroleSidebar');
+      sb.innerHTML = '';
+      data.forEach(e=>{
+        const trad = (currentLang==='it'? e.italiano : e.inglese);
+        const li = document.createElement('li');
         li.innerHTML = `<span class="blur">${e.romaji}</span> – <span class="translation">${trad}</span>`;
         sb.appendChild(li);
       });
-      document.getElementById("conteggioParole").textContent =
+      document.getElementById('conteggioParole').textContent =
         currentLang==='it'
-          ? `Totale: ${questions.length} parole`
-          : `Total: ${questions.length} words`;
-      applyBlurState();
+          ? `Totale: ${data.length} parole`
+          : `Total: ${data.length} words`;
     }
 
     function applyBlurState() {
-      document.querySelectorAll("#paroleSidebar li").forEach(li => {
-        const romaji = li.querySelector("span:first-of-type");
-        const trad   = li.querySelector("span.translation");
-        if (blurState === 0) {
-          romaji.classList.add("blur"); trad.classList.remove("blur");
-        } else if (blurState === 1) {
-          romaji.classList.remove("blur"); trad.classList.remove("blur");
+      document.querySelectorAll('#paroleSidebar li').forEach(li=>{
+        const romaji = li.querySelector('span:first-of-type');
+        const trad   = li.querySelector('span.translation');
+        if (blurState===0) {
+          romaji.classList.add('blur'); trad.classList.remove('blur');
+        } else if (blurState===1) {
+          romaji.classList.remove('blur'); trad.classList.remove('blur');
         } else {
-          romaji.classList.remove("blur"); trad.classList.add("blur");
+          romaji.classList.remove('blur'); trad.classList.add('blur');
         }
       });
     }
 
     function startQuiz() {
-      // mescolo e resetto
-      questions = shuffle(originalData.slice());
+      // mescola e resetta
+      shuffleArray(data);
       index = 0; score = 0; wrongAnswers = [];
-      document.getElementById("start-screen").style.display = "none";
-      document.getElementById("quiz-container").style.display = "flex";
-      loadQuestion(); popolaSidebar(); updateScore();
+      document.getElementById('start-screen').style.display = 'none';
+      document.getElementById('quiz-container').style.display = 'flex';
+
+      aggiornaTestiStatici();
+      loadQuestion();
+      popolaSidebar();
+      updateScore();
+      applyBlurState();
     }
 
-    // =============================
-    // Listener iniziali
-    // =============================
-    document.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("lang-it").onclick = () => setLanguage("it");
-      document.getElementById("lang-en").onclick = () => setLanguage("en");
-
-      if (localStorage.getItem("theme") === "dark")
-        document.body.classList.add("dark");
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // lingua
+      document.getElementById('lang-it').onclick = ()=> setLanguage('it');
+      document.getElementById('lang-en').onclick = ()=> setLanguage('en');
+      // tema
+      if (localStorage.getItem('theme')==='dark') document.body.classList.add('dark');
       aggiornaTestiStatici();
-
-      document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
-      document.getElementById("startBtn").addEventListener("click", startQuiz);
-      document.getElementById("verifyBtn").addEventListener("click", checkAnswer);
-      document.getElementById("nextBtn").addEventListener("click", () => {
+      document.getElementById('toggleThemeBtn').onclick = toggleTheme;
+      // copia parole
+      document.getElementById('copyWordsBtn').onclick = ()=>{
+        const text = data.map(e=>
+          `${e.romaji} – ${ currentLang==='it'? e.italiano : e.inglese }`
+        ).join('\n');
+        navigator.clipboard.writeText(text).then(()=>{
+          alert(labels[currentLang].copyWords+'!');
+        });
+      };
+      // toggle blur
+      document.getElementById('toggleBlurBtn').onclick = ()=>{
+        blurState = (blurState+1) % 3;
+        applyBlurState();
+      };
+      // verifica & avanti
+      document.getElementById('verifyBtn').onclick = checkAnswer;
+      document.getElementById('nextBtn').onclick   = ()=>{
         index++;
         loadQuestion();
-      });
-      document.getElementById("copyWordsBtn").addEventListener("click", () => {
-        const text = questions.map(e =>
-          `${e.romaji} – ${currentLang==='it'?e.italiano:e.inglese}`
-        ).join("\n");
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(() => alert(labels[currentLang].copyWords+"!"));
-        } else {
-          const ta = document.createElement("textarea");
-          ta.value = text; document.body.appendChild(ta);
-          ta.select(); document.execCommand("copy");
-          document.body.removeChild(ta);
-          alert(labels[currentLang].copyWords+"!");
+      };
+      // scorciatoie
+      document.addEventListener('keydown', e=>{
+        if (e.key==='Enter') checkAnswer();
+        if (e.key.toLowerCase()==='q') {
+          index++;
+          loadQuestion();
         }
-      });
-      document.getElementById("toggleBlurBtn").addEventListener("click", () => {
-        blurState = (blurState + 1) % 3;
-        applyBlurState();
       });
     });
   </script>
