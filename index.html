@@ -30,8 +30,7 @@
     .container {
       flex:1; background:var(--card-color);
       border-radius:16px; box-shadow:0 4px 18px rgba(0,0,0,0.08);
-      padding:30px; transition: max-height 0.3s;
-      max-height: 80vh; overflow-y: auto;
+      padding:30px; max-height:80vh; overflow-y:auto;
     }
     .quiz-title { font-size:30px; margin-bottom:25px; text-align:center; color:var(--accent-color); font-weight:600; }
     .question { font-size:24px; text-align:center; margin-bottom:20px; }
@@ -65,8 +64,8 @@
     .blur { filter:blur(5px); transition:filter 0.3s; cursor:pointer; }
     .blur:hover { filter:blur(0); }
     .version {
-      position:fixed; top:10px; right:100px; font-size:14px;
-      color:#888; font-style:italic;
+      position:fixed; top:10px; left:20px; 
+      font-size:16px; color:var(--accent-color); font-weight:bold;
     }
     .toggle-theme {
       position:fixed; top:10px; right:20px; font-size:16px;
@@ -74,32 +73,26 @@
       background:var(--accent-color); color:white;
       border:none; cursor:pointer;
     }
-    /* language selector */
     #lang-container {
       position:fixed; top:10px; right:160px; font-size:14px;
     }
   </style>
 </head>
 <body>
-  <!-- punteggio -->
   <div class="version"></div>
-  <!-- toggle tema -->
   <button class="toggle-theme" id="toggleThemeBtn">Dark Mode</button>
-  <!-- selettore lingua -->
   <div id="lang-container">
     <span id="languageLabel">Lingua:</span>
     <span id="lang-it" style="cursor:pointer; margin:0 6px;">Italiano</span>|
     <span id="lang-en" style="cursor:pointer; margin:0 6px;">Inglese</span>
   </div>
 
-  <!-- schermata di start -->
   <div id="start-screen" style="text-align:center; padding:100px 20px;">
     <h1 style="font-size:36px; margin-bottom:20px;">Benvenuto al Quiz di Romaji</h1>
     <p style="font-size:18px; margin-bottom:30px;">Metti alla prova la tua conoscenza del giapponese!</p>
     <button id="startBtn" style="font-size:18px; padding:12px 24px;">Inizia il quiz</button>
   </div>
 
-  <!-- quiz -->
   <div class="layout" id="quiz-container" style="display:none;">
     <div class="container">
       <div class="quiz-title">Quiz di Romaji Giapponese</div>
@@ -108,7 +101,6 @@
       </div>
       <div id="progress-text" style="text-align:center; font-size:14px; margin-bottom:15px;"></div>
       <div id="commandsContainer" style="text-align:center; font-size:14px; margin-bottom:10px;"></div>
-
       <div id="question" class="question"></div>
       <div class="input-group">
         <input type="text" id="userInput" />
@@ -127,12 +119,8 @@
     </div>
   </div>
 
-  <!-- dati del quiz -->
   <script src="new_romaji_quiz_data.js"></script>
   <script>
-    // =============================
-    // etichette multilingua
-    // =============================
     const labels = {
       it: {
         welcomeTitle: "Benvenuto al Quiz di Romaji",
@@ -180,36 +168,26 @@
       }
     };
 
-    // etichette per le spiegazioni
     const explLabels = {
       it: { descr: "Descrizione", uso: "Uso", esempio: "Esempio", nota: "Nota", perche: "Perché" },
       en: { descr: "Description", uso: "Usage", esempio: "Example", nota: "Note", perche: "Why" }
     };
 
-    // =============================
-    // variabili globali
-    // =============================
-    let currentLang = 'it';
-    let index = 0;
-    let score = 0;
-    let wrongAnswers = [];
-    let blurState = 0; // 0=blur romaji,1=none,2=blur trad
+    let currentLang = 'it',
+        index = 0,
+        score = 0,
+        wrongAnswers = [],
+        blurState = 0;
 
-    // =============================
-    // inizializzazione
-    // =============================
     document.addEventListener("DOMContentLoaded", ()=>{
-      // lingua
       document.getElementById("lang-it").onclick = ()=>setLanguage("it");
       document.getElementById("lang-en").onclick = ()=>setLanguage("en");
 
-      // tema
       if (localStorage.getItem("theme")==="dark")
         document.body.classList.add("dark");
 
       aggiornaTestiStatici();
 
-      // pulsanti principali
       document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
       document.getElementById("startBtn").addEventListener("click", startQuiz);
       document.getElementById("verifyBtn").addEventListener("click", checkAnswer);
@@ -221,19 +199,13 @@
       });
     });
 
-    // =============================
-    // aggiorna tutti i testi
-    // =============================
     function aggiornaTestiStatici(){
       const l = labels[currentLang];
-      // start screen
       document.querySelector("#start-screen h1").textContent = l.welcomeTitle;
       document.querySelector("#start-screen p").textContent = l.welcomeText;
       document.getElementById("startBtn").textContent = l.startButton;
-      // quiz header & sidebar
       document.querySelector(".quiz-title").textContent = l.welcomeTitle;
       document.querySelector(".sidebar h3").textContent = l.learnedWords;
-      // buttons & placeholders
       document.getElementById("userInput").placeholder = l.inputPlaceholder;
       document.getElementById("verifyBtn").textContent   = l.verifyButton;
       document.getElementById("nextBtn").textContent     = l.nextButton;
@@ -242,30 +214,20 @@
       document.getElementById("languageLabel").textContent = l.languageLabel;
       document.getElementById("commandsContainer").innerHTML =
         `<strong>${l.commandsTitle}:</strong> ${l.commandsText}`;
-      // tema button
       const themeBtn = document.getElementById("toggleThemeBtn");
       themeBtn.textContent = document.body.classList.contains("dark")
         ? l.themeLight : l.themeDark;
-      // score label
       updateScore();
     }
 
-    // =============================
-    // cambia lingua
-    // =============================
     function setLanguage(lang){
       currentLang = lang;
       document.getElementById("lang-it").style.fontWeight = lang==='it'?"bold":"normal";
       document.getElementById("lang-en").style.fontWeight = lang==='en'?"bold":"normal";
       aggiornaTestiStatici();
-      loadQuestion();
-      popolaSidebar();
-      applyBlurState();
+      loadQuestion(); popolaSidebar(); applyBlurState();
     }
 
-    // =============================
-    // toggle tema
-    // =============================
     function toggleTheme(){
       document.body.classList.toggle("dark");
       localStorage.setItem("theme",
@@ -273,25 +235,17 @@
       aggiornaTestiStatici();
     }
 
-    // =============================
-    // inizia il quiz
-    // =============================
     function startQuiz(){
-      // mescola le domande
+      // mescola
       for(let i=data.length-1;i>0;i--){
         const j=Math.floor(Math.random()*(i+1));
         [data[i],data[j]]=[data[j],data[i]];
       }
       document.getElementById("start-screen").style.display="none";
       document.getElementById("quiz-container").style.display="flex";
-      loadQuestion();
-      popolaSidebar();
-      updateScore();
-      applyBlurState();
-      // invio = verifica
+      loadQuestion(); popolaSidebar(); updateScore(); applyBlurState();
       document.getElementById("userInput")
         .addEventListener("keydown", e=>{ if(e.key==="Enter") checkAnswer(); });
-      // frecce e Q
       document.addEventListener("keydown", e=>{
         if(e.key==="ArrowRight") nextQuestion();
         if(e.key==="ArrowLeft") prevQuestion();
@@ -299,9 +253,6 @@
       });
     }
 
-    // =============================
-    // mostra domanda
-    // =============================
     function loadQuestion(){
       document.getElementById("userInput").value = "";
       document.getElementById("result").innerHTML = "";
@@ -310,16 +261,15 @@
       document.getElementById("progress-fill").style.width = pct+"%";
       document.getElementById("progress-text").textContent =
         `${index+1} / ${data.length}`;
-      if(index < data.length){
+      if(index<data.length){
         document.getElementById("question").innerHTML =
           `<strong>${labels[currentLang].translate}:</strong> ` +
           data[index][ currentLang==="it"?"italiano":"inglese" ];
       } else {
-        // fine
         document.getElementById("question").textContent = labels[currentLang].completed;
         document.getElementById("progress-text").textContent =
           `${labels[currentLang].finalScore}: ${score} / ${data.length}`;
-        document.querySelector(".input-group").style.display = "none";
+        document.querySelector(".input-group").style.display="none";
         const res = document.getElementById("result");
         const btnR = document.createElement("button");
         btnR.textContent = labels[currentLang].restart;
@@ -329,8 +279,7 @@
           const btnW = document.createElement("button");
           btnW.textContent = labels[currentLang].retryWrong;
           btnW.onclick = ()=>{
-            data = [...wrongAnswers];
-            index=0; score=0; wrongAnswers=[];
+            data=[...wrongAnswers]; index=0; score=0; wrongAnswers=[];
             document.querySelector(".input-group").style.display="block";
             loadQuestion(); updateScore();
           };
@@ -339,9 +288,6 @@
       }
     }
 
-    // =============================
-    // verifica risposta
-    // =============================
     function checkAnswer(){
       if(index>=data.length) return;
       const input = document.getElementById("userInput").value.trim().toLowerCase();
@@ -350,7 +296,6 @@
         const e = data[index];
         document.getElementById("result").innerHTML =
           `<strong>Frase:</strong><br>${e.frase}<br><em>${e.traduzione[currentLang]}</em>`;
-        // costruisci spiegazioni
         const spieg = { ...(e.spiegazioni||{}) };
         ["wa","o","ni","to"].forEach(p=>{
           if(!spieg[p] && e.frase.includes(` ${p} `))
@@ -371,11 +316,6 @@
         }
         document.getElementById("spiegazioni").innerHTML = html;
         score++; updateScore();
-        // scroll automatico su mobile
-        const sp = document.getElementById("spiegazioni");
-        if(sp.innerHTML.trim()!==""){
-          sp.scrollIntoView({ behavior:"smooth", block:"start" });
-        }
       } else {
         document.getElementById("result").innerHTML =
           `<span style="color:red;">✗ ${ currentLang==="it"?"Risposta sbagliata":"Wrong answer"}. Riprova.</span>`;
@@ -383,22 +323,15 @@
       }
     }
 
-    // =============================
-    // vai alla prossima
-    // =============================
     function nextQuestion(){
-      if(index < data.length) index++;
+      if(index<data.length) index++;
       loadQuestion();
     }
-    // indietro
     function prevQuestion(){
       if(index>0) index--;
       loadQuestion();
     }
 
-    // =============================
-    // sidebar
-    // =============================
     function popolaSidebar(){
       const sb = document.getElementById("paroleSidebar");
       sb.innerHTML="";
@@ -413,6 +346,7 @@
           ? `Totale: ${data.length} parole`
           : `Total: ${data.length} words`;
     }
+
     function applyBlurState(){
       document.querySelectorAll("#paroleSidebar li").forEach(li=>{
         const romaji = li.querySelector("span:first-of-type");
@@ -427,9 +361,6 @@
       });
     }
 
-    // =============================
-    // copia parole
-    // =============================
     function copyWords(){
       const text = data.map(e=>
         `${e.romaji} – ${ currentLang==='it'? e.italiano : e.inglese }`
@@ -444,9 +375,6 @@
       }
     }
 
-    // =============================
-    // aggiorna punteggio
-    // =============================
     function updateScore(){
       document.querySelector(".version").innerText =
         `${labels[currentLang].scoreLabel}: ${score}`;
