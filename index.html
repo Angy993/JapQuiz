@@ -112,9 +112,7 @@
 
   <script src="new_romaji_quiz_data.js"></script>
   <script>
-    // =============================
-    // Etichette multilingua
-    // =============================
+    // testi UI
     const labels = {
       it: {
         welcomeTitle: "Benvenuto al Quiz di Romaji",
@@ -122,17 +120,17 @@
         startButton: "Inizia il quiz",
         learnedWords: "Parole Imparate",
         verifyButton: "Verifica",
-        next: "Avanti",
         inputPlaceholder: "Scrivi in romaji",
         copyWords: "Copia parole",
+        toggleBlur: "Toggle Blur",
         languageLabel: "Lingua:",
         commandsTitle: "Comandi",
-        commandsText: "Invio = Verifica | Q = Salta",
+        commandsText: "Invio = Verifica | → = Avanti | ← = Indietro | Q = Salta",
         translate: "Traduci",
         restart: "Ricomincia da capo",
         retryWrong: "Ripeti solo quelle sbagliate",
         completed: "Hai completato il quiz!",
-        finalScore: "Punteggio",
+        finalScore: "Punteggio finale",
         themeDark: "Modalità Scura",
         themeLight: "Modalità Chiara"
       },
@@ -142,277 +140,259 @@
         startButton: "Start the quiz",
         learnedWords: "Learned Words",
         verifyButton: "Check",
-        next: "Next",
         inputPlaceholder: "Type in romaji",
         copyWords: "Copy words",
+        toggleBlur: "Toggle Blur",
         languageLabel: "Language:",
         commandsTitle: "Shortcuts",
-        commandsText: "Enter = Check | Q = Skip",
+        commandsText: "Enter = Check | → = Next | ← = Back | Q = Skip",
         translate: "Translate",
-        restart: "Restart from beginning",
+        restart: "Restart",
         retryWrong: "Repeat only wrong ones",
         completed: "You’ve completed the quiz!",
-        finalScore: "Score",
+        finalScore: "Final score",
         themeDark: "Dark Mode",
         themeLight: "Light Mode"
       }
     };
 
-    // =============================
-    // Stato globale
-    // =============================
-    let currentLang = 'it',
-        index = 0,
-        score = 0,
-        wrongAnswers = [],
-        blurState = 0;
+    // etichette per la sezione spiegazioni
+    const explanationLabels = {
+      desc: { it: "Descrizione", en: "Description" },
+      uso: { it: "Uso",         en: "Usage" },
+      esempio: { it: "Esempio", en: "Example" },
+      nota: { it: "Nota",       en: "Note" },
+      perche: { it: "Perché",   en: "Why" }
+    };
 
-    // =============================
-    // Util: mescola un array in-place
-    // =============================
-    function shuffle(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-    }
+    // generico
+    const spiegazioniGeneriche = {
+      wa: { descrizione: { it:"Particella del tema.", en:"Topic particle." },
+            uso:         { it:"Indica il soggetto della frase.", en:"Marks the topic of the sentence." },
+            esempio:     { it:"Watashi wa gakusei desu.",     en:"I am a student." },
+            nota:        { it:"Si scrive は ma si legge 'wa'.", en:"Written as は but pronounced 'wa'." },
+            perche:      { it:"Watashi è il soggetto che compie l'azione.", en:"Watashi is the one performing the action." }
+          },
+      o:  { descrizione: { it:"Particella dell’oggetto diretto.", en:"Direct object particle." },
+            uso:         { it:"Introduce ciò che subisce l'azione.", en:"Marks what receives the action." },
+            esempio:     { it:"Ringo o taberu.", en:"I eat an apple." },
+            nota:        { it:"Si scrive を ma si legge 'o'.", en:"Written as を but pronounced 'o'." },
+            perche:      { it:"L'oggetto che viene mangiato, guardato, ecc.", en:"The object being eaten, watched, etc." }
+          },
+      ni: { descrizione: { it:"Particella di destinazione o tempo.", en:"Direction or time particle." },
+            uso:         { it:"Indica dove si va o quando.", en:"Indicates direction or time." },
+            esempio:     { it:"Gakkou ni iku.", en:"I go to school." },
+            nota:        { it:"Può indicare direzione, tempo o destinatario.", en:"Can mark direction, time, or recipient." },
+            perche:      { it:"Serve per indicare la destinazione o il tempo.", en:"Used for destination or time indication." }
+          },
+      to: { descrizione: { it:"Particella connettiva (con).", en:"Connecting particle (with)." },
+            uso:         { it:"Usata per indicare compagnia.", en:"Used to show companionship." },
+            esempio:     { it:"Tomodachi to hanasu.", en:"I speak with a friend." },
+            nota:        { it:"Collega due elementi o persone.", en:"Connects two elements or people." },
+            perche:      { it:"Indica con chi si svolge l’azione.", en:"Shows with whom the action is done." }
+          }
+    };
 
-    // =============================
-    // Aggiorna tutti i testi statici
-    // =============================
-    function aggiornaTestiStatici() {
+    let data, currentLang='it', index=0, score=0, wrongAnswers=[], blurState=0;
+
+    // Load external data file (new_romaji_quiz_data.js deve definire "data")
+    document.addEventListener("DOMContentLoaded", ()=> {
+      // testi dinamici
+      aggiornaTestiStatici();
+
+      // lingua
+      document.getElementById("lang-it").onclick = ()=>setLanguage("it");
+      document.getElementById("lang-en").onclick = ()=>setLanguage("en");
+
+      // start
+      document.getElementById("startBtn").onclick = startQuiz;
+
+      // tema
+      if(localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
+      document.getElementById("toggleThemeBtn").onclick = toggleTheme;
+
+      // copia parole
+      document.getElementById("copyWordsBtn").onclick = copiaParole;
+
+      // toggle blur via bottone
+      document.getElementById("toggleBlurBtn").onclick = ()=>{
+        blurState = (blurState+1)%3;
+        applyBlurState();
+      };
+    });
+
+    function aggiornaTestiStatici(){
       const l = labels[currentLang];
-      // Start screen
       document.querySelector("#start-screen h1").textContent = l.welcomeTitle;
       document.querySelector("#start-screen p").textContent = l.welcomeText;
       document.getElementById("startBtn").textContent = l.startButton;
-      // Titoli quiz & sidebar
       document.querySelector(".quiz-title").textContent = l.welcomeTitle;
       document.querySelector(".sidebar h3").textContent = l.learnedWords;
-      // Input & pulsanti
       document.getElementById("userInput").placeholder = l.inputPlaceholder;
       document.getElementById("verifyBtn").textContent = l.verifyButton;
       document.getElementById("copyWordsBtn").textContent = l.copyWords;
-      document.getElementById("toggleBlurBtn").textContent = "Toggle Blur";
-      // Label lingua
+      document.getElementById("toggleBlurBtn").textContent = l.toggleBlur;
       document.getElementById("languageLabel").textContent = l.languageLabel;
-      // Comandi
       document.getElementById("commandsContainer").innerHTML =
         `<strong>${l.commandsTitle}:</strong> ${l.commandsText}`;
-      // Tema
-      const themeBtn = document.getElementById("toggleThemeBtn");
-      themeBtn.textContent = document.body.classList.contains("dark") ? l.themeLight : l.themeDark;
+      document.getElementById("toggleThemeBtn").textContent =
+        document.body.classList.contains("dark") ? l.themeLight : l.themeDark;
     }
 
-    // =============================
-    // Attiva/disattiva tema scuro
-    // =============================
-    function toggleTheme() {
+    function toggleTheme(){
       document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+      localStorage.setItem("theme", document.body.classList.contains("dark")?"dark":"light");
       aggiornaTestiStatici();
     }
 
-    // =============================
-    // Aggiorna il contatore Punteggio (tradotto)
-    // =============================
-    function updateScore() {
-      const l = labels[currentLang];
-      document.querySelector(".version").innerText = `${l.finalScore}: ${score}`;
-    }
-
-    // =============================
-    // Carica domanda o risultato finale
-    // =============================
-    function loadQuestion() {
-      const total = data.length;
-      const pct = Math.round((index / total) * 100);
-      document.getElementById("progress-fill").style.width = pct + "%";
-      document.getElementById("progress-text").textContent = `${index + 1} / ${total}`;
-
-      document.getElementById("userInput").value = "";
-      document.getElementById("result").innerHTML = "";
-      document.getElementById("spiegazioni").innerHTML = "";
-
-      if (index < total) {
-        const l = labels[currentLang];
-        document.getElementById("question").innerHTML =
-          `<strong>${l.translate}:</strong> ` +
-          data[index][ currentLang === 'it' ? "italiano" : "inglese" ];
-        document.querySelector(".input-group").style.display = "block";
-      } else {
-        const l = labels[currentLang];
-        document.getElementById("question").textContent = l.completed;
-        document.getElementById("progress-text").textContent =
-          `${l.finalScore}: ${score} / ${total}`;
-        document.getElementById("progress-fill").style.width = "100%";
-        document.querySelector(".input-group").style.display = "none";
-        const res = document.getElementById("result");
-        // Bottone ricomincia
-        const btnR = document.createElement("button");
-        btnR.textContent = l.restart;
-        btnR.onclick = () => location.reload();
-        res.appendChild(btnR);
-        // Bottone ripeti sbagliate
-        if (wrongAnswers.length) {
-          const btnW = document.createElement("button");
-          btnW.textContent = l.retryWrong;
-          btnW.onclick = () => {
-            data.splice(0, data.length, ...wrongAnswers);
-            wrongAnswers = [];
-            index = 0;
-            score = 0;
-            document.querySelector(".input-group").style.display = "block";
-            loadQuestion(); updateScore();
-          };
-          res.appendChild(btnW);
-        }
+    function setLanguage(lang){
+      currentLang = lang;
+      document.getElementById("lang-it").style.fontWeight = lang==='it'?"bold":"normal";
+      document.getElementById("lang-en").style.fontWeight = lang==='en'?"bold":"normal";
+      aggiornaTestiStatici();
+      if(document.getElementById("quiz-container").style.display==="flex"){
+        loadQuestion();
+        popolaSidebar();
+        applyBlurState();
       }
     }
 
-    // =============================
-    // Verifica la risposta
-    // =============================
-    function checkAnswer() {
-      const input = document.getElementById("userInput").value.trim().toLowerCase();
+    function startQuiz(){
+      index=0; score=0; wrongAnswers=[];
+      document.getElementById("start-screen").style.display="none";
+      document.getElementById("quiz-container").style.display="flex";
+      aggiornaTestiStatici();
+      loadQuestion();
+      popolaSidebar();
+      updateScore();
+      applyBlurState();
+      document.getElementById("verifyBtn").onclick = checkAnswer;
+      document.getElementById("userInput").addEventListener("keydown", e=>{
+        if(e.key==="Enter") checkAnswer();
+      });
+    }
+
+    function updateScore(){
+      const l = labels[currentLang];
+      document.querySelector(".version").innerText = `${l.finalScore.split(' ')[0]}: ${score}`;
+    }
+
+    function loadQuestion(){
+      const q = data[index];
+      document.getElementById("userInput").value="";
+      document.getElementById("result").innerHTML="";
+      document.getElementById("spiegazioni").innerHTML="";
+      const pct = Math.round((index/data.length)*100);
+      document.getElementById("progress-fill").style.width = pct+"%";
+      document.getElementById("progress-text").textContent = `${index+1} / ${data.length}`;
+      const ask = labels[currentLang].translate + ": ";
+      document.getElementById("question").innerHTML =
+        (index<data.length ? `<strong>${ask}</strong>` + q[currentLang==='it'?"italiano":"inglese"] : "");
+    }
+
+    function checkAnswer(){
+      const inpt = document.getElementById("userInput").value.trim().toLowerCase();
       const correct = data[index].romaji.toLowerCase();
-      if (input === correct) {
+      if(inpt===correct){
         const e = data[index];
-        // Mostra frase e traduzione
+        // frase e traduzione
         document.getElementById("result").innerHTML =
           `<strong>Frase:</strong><br>${e.frase}<br><em>${e.traduzione[currentLang]}</em>`;
-
-        // Estrai spiegazioni particelle
-        const spieg = { ...(e.spiegazioni || {}) };
-        ["wa","o","ni","to"].forEach(p => {
-          if (!spieg[p] && e.frase.includes(` ${p} `)) {
-            spieg[p] = spiegazioniGeneriche[p];
-          }
+        // particelle
+        const sp = { ...(e.spiegazioni||{}) };
+        ["wa","o","ni","to"].forEach(p=>{
+          if(!sp[p] && e.frase.includes(` ${p} `)) sp[p]=spiegazioniGeneriche[p];
         });
-
-        // Inietta HTML spiegazioni
-        let html = "";
-        for (const k in spieg) {
-          const s = spieg[k];
-          html +=
-            `<div class="explanation">
-               <strong>${k}</strong><br>
-               <em><strong>Descrizione:</strong></em> ${s.descrizione[currentLang]}<br>
-               <em><strong>Uso:</strong></em> ${s.uso[currentLang]}<br>
-               <em><strong>Esempio:</strong></em> ${s.esempio[currentLang]}<br>
-               <em><strong>Nota:</strong></em> ${s.nota[currentLang]}
-               ${s.perche
-                 ? `<br><em><strong>${currentLang==='it'?'Perché':'Why'}:</strong></em> ${s.perche[currentLang]}`
-                 : ""}
-             </div>`;
+        // costruisco html spiegazioni
+        let html="";
+        for(const key in sp){
+          const s = sp[key];
+          html += `<div class="explanation"><strong>${key}</strong><br>`;
+          html += `<em><strong>${explanationLabels.desc[currentLang]}:</strong></em> ${s.descrizione[currentLang]}<br>`;
+          html += `<em><strong>${explanationLabels.uso[currentLang]}:</strong></em> ${s.uso[currentLang]}<br>`;
+          html += `<em><strong>${explanationLabels.esempio[currentLang]}:</strong></em> ${s.esempio[currentLang]}<br>`;
+          html += `<em><strong>${explanationLabels.nota[currentLang]}:</strong></em> ${s.nota[currentLang]}`;
+          if(s.perche){
+            html += `<br><em><strong>${explanationLabels.perche[currentLang]}:</strong></em> ${s.perche[currentLang]}`;
+          }
+          html += `</div>`;
         }
         document.getElementById("spiegazioni").innerHTML = html;
 
-        // Aggiorna punteggio (ma non avanza in automatico)
-        score++; updateScore();
-
-        // Modifica bottone da "Verifica" a "Avanti/Next"
-        const btn = document.getElementById("verifyBtn");
-        const l = labels[currentLang];
-        btn.textContent = l.next;
-        btn.onclick = () => {
-          // ripristina bottone e procedi
-          btn.textContent = l.verifyButton;
-          btn.onclick = checkAnswer;
-          index++;
-          loadQuestion();
-        };
-
+        score++;
+        updateScore();
+        // non passare subito alla successiva, aspetto un click
       } else {
         document.getElementById("result").innerHTML =
           `<span style="color:red;">✗ Risposta sbagliata. Riprova.</span>`;
         wrongAnswers.push(data[index]);
       }
+      // rimuovo solo al click sul pulsante per avanzare
+      document.getElementById("verifyBtn").onclick = ()=>{
+        if(inpt.toLowerCase()===correct){
+          index++;
+          if(index<data.length) loadQuestion();
+          else finishQuiz();
+        } else {
+          checkAnswer();
+        }
+      };
     }
 
-    // =============================
-    // Sidebar: popola parole e conteggio
-    // =============================
-    function popolaSidebar() {
-      const sb = document.getElementById("paroleSidebar");
-      sb.innerHTML = "";
-      data.forEach(e => {
-        const trad = currentLang === 'it' ? e.italiano : e.inglese;
-        const li = document.createElement("li");
-        li.innerHTML = `<span class="blur">${e.romaji}</span> – <span class="translation">${trad}</span>`;
+    function finishQuiz(){
+      const l=labels[currentLang];
+      document.getElementById("question").textContent = l.completed;
+      document.querySelector(".input-group").style.display="none";
+      document.getElementById("progress-text").textContent =
+        `${l.finalScore}: ${score} / ${data.length}`;
+      document.getElementById("progress-fill").style.width="100%";
+      const res=document.getElementById("result");
+      const b=document.createElement("button");
+      b.textContent=l.restart; b.onclick=()=>location.reload();
+      res.appendChild(b);
+      if(wrongAnswers.length){
+        const w=document.createElement("button");
+        w.textContent=l.retryWrong;
+        w.onclick=()=>{
+          data=[...wrongAnswers]; index=0; score=0; wrongAnswers=[];
+          document.querySelector(".input-group").style.display="block";
+          loadQuestion(); updateScore();
+        };
+        res.appendChild(w);
+      }
+    }
+
+    function popolaSidebar(){
+      const sb=document.getElementById("paroleSidebar");
+      sb.innerHTML="";
+      data.forEach(e=>{
+        const trad = currentLang==='it'? e.italiano : e.inglese;
+        const li=document.createElement("li");
+        li.innerHTML=`<span class="blur">${e.romaji}</span> – <span class="translation">${trad}</span>`;
         sb.appendChild(li);
       });
-      const l = labels[currentLang];
       document.getElementById("conteggioParole").textContent =
-        currentLang === 'it'
+        currentLang==='it'
           ? `Totale: ${data.length} parole`
           : `Total: ${data.length} words`;
-      applyBlurState();
     }
 
-    // =============================
-    // Applica lo stato di blur
-    // =============================
-    function applyBlurState() {
-      document.querySelectorAll("#paroleSidebar li").forEach(li => {
-        const romaji = li.querySelector("span:first-of-type");
-        const trad   = li.querySelector("span.translation");
-        if (blurState === 0) {
-          romaji.classList.add("blur"); trad.classList.remove("blur");
-        } else if (blurState === 1) {
-          romaji.classList.remove("blur"); trad.classList.remove("blur");
-        } else {
-          romaji.classList.remove("blur"); trad.classList.add("blur");
-        }
+    function applyBlurState(){
+      document.querySelectorAll("#paroleSidebar li").forEach(li=>{
+        const r=li.querySelector("span:first-of-type");
+        const t=li.querySelector("span.translation");
+        if(blurState===0){ r.classList.add("blur"); t.classList.remove("blur"); }
+        else if(blurState===1){ r.classList.remove("blur"); t.classList.remove("blur"); }
+        else { r.classList.remove("blur"); t.classList.add("blur"); }
       });
     }
 
-    // =============================
-    // Avvio quiz: mescola, nasconde Start, mostra container
-    // =============================
-    function startQuiz() {
-      shuffle(data);
-      document.getElementById("start-screen").style.display = "none";
-      document.getElementById("quiz-container").style.display = "flex";
-      loadQuestion(); popolaSidebar(); updateScore();
+    function copiaParole(){
+      const text=data.map(e=>
+        `${e.romaji} – ${currentLang==='it'?e.italiano:e.inglese}`
+      ).join("\n");
+      navigator.clipboard.writeText(text).then(()=> alert(labels[currentLang].copyWords+"!"));
     }
-
-    // =============================
-    // Inizializzazione al caricamento
-    // =============================
-    document.addEventListener("DOMContentLoaded", () => {
-      // Switch lingua
-      document.getElementById("lang-it").onclick = () => {
-        currentLang = 'it'; aggiornaTestiStatici(); loadQuestion(); popolaSidebar(); updateScore();
-      };
-      document.getElementById("lang-en").onclick = () => {
-        currentLang = 'en'; aggiornaTestiStatici(); loadQuestion(); popolaSidebar(); updateScore();
-      };
-
-      // Tema
-      if (localStorage.getItem("theme") === "dark") document.body.classList.add("dark");
-      aggiornaTestiStatici();
-
-      // Pulsanti
-      document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
-      document.getElementById("copyWordsBtn").addEventListener("click", () => {
-        const text = data.map(e =>
-          `${e.romaji} – ${ currentLang === 'it' ? e.italiano : e.inglese }`
-        ).join("\n");
-        navigator.clipboard?.writeText(text).then(() => {
-          alert(labels[currentLang].copyWords + "!");
-        });
-      });
-      document.getElementById("toggleBlurBtn").addEventListener("click", () => {
-        blurState = (blurState + 1) % 3;
-        applyBlurState();
-      });
-      document.getElementById("startBtn").addEventListener("click", startQuiz);
-      document.getElementById("verifyBtn").addEventListener("click", checkAnswer);
-      // Invio per confermare
-      document.getElementById("userInput")
-        .addEventListener("keydown", e => { if (e.key === "Enter") checkAnswer(); });
-    });
   </script>
 </body>
 </html>
