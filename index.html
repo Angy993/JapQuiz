@@ -64,8 +64,14 @@
     .blur { filter:blur(5px); transition:filter 0.3s; cursor:pointer; }
     .blur:hover { filter:blur(0); }
     .version {
-      position:fixed; top:10px; left:20px; 
-      font-size:16px; color:var(--accent-color); font-weight:bold;
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      color: var(--accent-color);
+      font-weight: bold;
+      z-index: 1000;
     }
     .toggle-theme {
       position:fixed; top:10px; right:20px; font-size:16px;
@@ -74,7 +80,8 @@
       border:none; cursor:pointer;
     }
     #lang-container {
-      position:fixed; top:10px; right:160px; font-size:14px;
+      position:fixed; top:40px; right:20px; font-size:14px;
+      z-index: 1000;
     }
   </style>
 </head>
@@ -182,20 +189,15 @@
     document.addEventListener("DOMContentLoaded", ()=>{
       document.getElementById("lang-it").onclick = ()=>setLanguage("it");
       document.getElementById("lang-en").onclick = ()=>setLanguage("en");
-
-      if (localStorage.getItem("theme")==="dark")
-        document.body.classList.add("dark");
-
+      if (localStorage.getItem("theme")==="dark") document.body.classList.add("dark");
       aggiornaTestiStatici();
-
       document.getElementById("toggleThemeBtn").addEventListener("click", toggleTheme);
       document.getElementById("startBtn").addEventListener("click", startQuiz);
       document.getElementById("verifyBtn").addEventListener("click", checkAnswer);
       document.getElementById("nextBtn").addEventListener("click", nextQuestion);
       document.getElementById("copyWordsBtn").addEventListener("click", copyWords);
       document.getElementById("toggleBlurBtn").addEventListener("click", ()=>{
-        blurState = (blurState+1)%3;
-        applyBlurState();
+        blurState = (blurState+1)%3; applyBlurState();
       });
     });
 
@@ -224,8 +226,7 @@
       currentLang = lang;
       document.getElementById("lang-it").style.fontWeight = lang==='it'?"bold":"normal";
       document.getElementById("lang-en").style.fontWeight = lang==='en'?"bold":"normal";
-      aggiornaTestiStatici();
-      loadQuestion(); popolaSidebar(); applyBlurState();
+      aggiornaTestiStatici(); loadQuestion(); popolaSidebar(); applyBlurState();
     }
 
     function toggleTheme(){
@@ -236,7 +237,7 @@
     }
 
     function startQuiz(){
-      // mescola
+      // mescola domande
       for(let i=data.length-1;i>0;i--){
         const j=Math.floor(Math.random()*(i+1));
         [data[i],data[j]]=[data[j],data[i]];
@@ -263,7 +264,7 @@
         `${index+1} / ${data.length}`;
       if(index<data.length){
         document.getElementById("question").innerHTML =
-          `<strong>${labels[currentLang].translate}:</strong> ` +
+          `<strong>${labels[currentLang].translate}:</strong> `+
           data[index][ currentLang==="it"?"italiano":"inglese" ];
       } else {
         document.getElementById("question").textContent = labels[currentLang].completed;
@@ -323,14 +324,8 @@
       }
     }
 
-    function nextQuestion(){
-      if(index<data.length) index++;
-      loadQuestion();
-    }
-    function prevQuestion(){
-      if(index>0) index--;
-      loadQuestion();
-    }
+    function nextQuestion(){ if(index<data.length) index++; loadQuestion(); }
+    function prevQuestion(){ if(index>0) index--; loadQuestion(); }
 
     function popolaSidebar(){
       const sb = document.getElementById("paroleSidebar");
