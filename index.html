@@ -110,9 +110,10 @@
     </div>
   </div>
 
+  <!-- questo file deve definire globalmente `data = [ ... ];` -->
   <script src="new_romaji_quiz_data.js"></script>
   <script>
-    // testi UI
+    // ===== testi UI =====
     const labels = {
       it: {
         welcomeTitle: "Benvenuto al Quiz di Romaji",
@@ -156,55 +157,61 @@
       }
     };
 
-    // etichette per la sezione spiegazioni
     const explanationLabels = {
-      desc: { it: "Descrizione", en: "Description" },
-      uso: { it: "Uso",         en: "Usage" },
-      esempio: { it: "Esempio", en: "Example" },
-      nota: { it: "Nota",       en: "Note" },
-      perche: { it: "Perché",   en: "Why" }
+      desc:    { it:"Descrizione", en:"Description" },
+      uso:     { it:"Uso",         en:"Usage"       },
+      esempio: { it:"Esempio",     en:"Example"     },
+      nota:    { it:"Nota",        en:"Note"        },
+      perche:  { it:"Perché",      en:"Why"         }
     };
 
-    // generico
+    // ===== particelle generiche =====
     const spiegazioniGeneriche = {
-      wa: { descrizione: { it:"Particella del tema.", en:"Topic particle." },
-            uso:         { it:"Indica il soggetto della frase.", en:"Marks the topic of the sentence." },
-            esempio:     { it:"Watashi wa gakusei desu.",     en:"I am a student." },
-            nota:        { it:"Si scrive は ma si legge 'wa'.", en:"Written as は but pronounced 'wa'." },
-            perche:      { it:"Watashi è il soggetto che compie l'azione.", en:"Watashi is the one performing the action." }
-          },
-      o:  { descrizione: { it:"Particella dell’oggetto diretto.", en:"Direct object particle." },
-            uso:         { it:"Introduce ciò che subisce l'azione.", en:"Marks what receives the action." },
-            esempio:     { it:"Ringo o taberu.", en:"I eat an apple." },
-            nota:        { it:"Si scrive を ma si legge 'o'.", en:"Written as を but pronounced 'o'." },
-            perche:      { it:"L'oggetto che viene mangiato, guardato, ecc.", en:"The object being eaten, watched, etc." }
-          },
-      ni: { descrizione: { it:"Particella di destinazione o tempo.", en:"Direction or time particle." },
-            uso:         { it:"Indica dove si va o quando.", en:"Indicates direction or time." },
-            esempio:     { it:"Gakkou ni iku.", en:"I go to school." },
-            nota:        { it:"Può indicare direzione, tempo o destinatario.", en:"Can mark direction, time, or recipient." },
-            perche:      { it:"Serve per indicare la destinazione o il tempo.", en:"Used for destination or time indication." }
-          },
-      to: { descrizione: { it:"Particella connettiva (con).", en:"Connecting particle (with)." },
-            uso:         { it:"Usata per indicare compagnia.", en:"Used to show companionship." },
-            esempio:     { it:"Tomodachi to hanasu.", en:"I speak with a friend." },
-            nota:        { it:"Collega due elementi o persone.", en:"Connects two elements or people." },
-            perche:      { it:"Indica con chi si svolge l’azione.", en:"Shows with whom the action is done." }
-          }
+      wa: {
+        descrizione:{ it:"Particella del tema.", en:"Topic particle." },
+        uso:        { it:"Indica il soggetto della frase.", en:"Marks the topic." },
+        esempio:    { it:"Watashi wa gakusei desu.", en:"I am a student." },
+        nota:       { it:"Si scrive は ma si legge 'wa'.", en:"Written as は pronounced 'wa'." },
+        perche:     { it:"Watashi è soggetto dell’azione.", en:"Watashi performs the action." }
+      },
+      o: {
+        descrizione:{ it:"Particella oggetto diretto.", en:"Direct object particle." },
+        uso:        { it:"Segna l'oggetto che subisce l'azione.", en:"Marks the object." },
+        esempio:    { it:"Ringo o taberu.", en:"I eat an apple." },
+        nota:       { it:"Si scrive を ma si legge 'o'.", en:"Written が pronounced 'o'." },
+        perche:     { it:"È l'oggetto dell'azione.", en:"It's the action's object." }
+      },
+      ni: {
+        descrizione:{ it:"Particella di luogo/tempo.", en:"Direction/time particle." },
+        uso:        { it:"Indica destinazione o tempo.", en:"Marks direction or time." },
+        esempio:    { it:"Gakkou ni iku.", en:"I go to school." },
+        nota:       { it:"Usata per luogo, tempo, destinatario.", en:"Used for place/time/recipient." },
+        perche:     { it:"Segna destinazione/tempo.", en:"Used for destination/time." }
+      },
+      to: {
+        descrizione:{ it:"Particella connettiva (con).", en:"Connecting particle (with)." },
+        uso:        { it:"Segna compagnia.", en:"Marks companionship." },
+        esempio:    { it:"Tomodachi to hanasu.", en:"I speak with a friend." },
+        nota:       { it:"Collega elementi o persone.", en:"Connects two entities." },
+        perche:     { it:"Segna con chi.", en:"Shows with whom." }
+      }
     };
 
-    let data, currentLang='it', index=0, score=0, wrongAnswers=[], blurState=0;
+    // NON dichiariamo `data` qui! arriva da new_romaji_quiz_data.js
+    let currentLang='it',
+        index=0,
+        score=0,
+        wrongAnswers=[],
+        blurState=0;
 
-    // Load external data file (new_romaji_quiz_data.js deve definire "data")
-    document.addEventListener("DOMContentLoaded", ()=> {
-      // testi dinamici
+    document.addEventListener("DOMContentLoaded", ()=>{
       aggiornaTestiStatici();
 
-      // lingua
+      // switch lingua
       document.getElementById("lang-it").onclick = ()=>setLanguage("it");
       document.getElementById("lang-en").onclick = ()=>setLanguage("en");
 
-      // start
+      // start quiz
       document.getElementById("startBtn").onclick = startQuiz;
 
       // tema
@@ -214,7 +221,7 @@
       // copia parole
       document.getElementById("copyWordsBtn").onclick = copiaParole;
 
-      // toggle blur via bottone
+      // toggle blur
       document.getElementById("toggleBlurBtn").onclick = ()=>{
         blurState = (blurState+1)%3;
         applyBlurState();
@@ -223,25 +230,26 @@
 
     function aggiornaTestiStatici(){
       const l = labels[currentLang];
-      document.querySelector("#start-screen h1").textContent = l.welcomeTitle;
-      document.querySelector("#start-screen p").textContent = l.welcomeText;
-      document.getElementById("startBtn").textContent = l.startButton;
-      document.querySelector(".quiz-title").textContent = l.welcomeTitle;
-      document.querySelector(".sidebar h3").textContent = l.learnedWords;
-      document.getElementById("userInput").placeholder = l.inputPlaceholder;
-      document.getElementById("verifyBtn").textContent = l.verifyButton;
-      document.getElementById("copyWordsBtn").textContent = l.copyWords;
-      document.getElementById("toggleBlurBtn").textContent = l.toggleBlur;
-      document.getElementById("languageLabel").textContent = l.languageLabel;
-      document.getElementById("commandsContainer").innerHTML =
+      document.querySelector("#start-screen h1").textContent    = l.welcomeTitle;
+      document.querySelector("#start-screen p").textContent     = l.welcomeText;
+      document.getElementById("startBtn").textContent           = l.startButton;
+      document.querySelector(".quiz-title").textContent         = l.welcomeTitle;
+      document.querySelector(".sidebar h3").textContent         = l.learnedWords;
+      document.getElementById("userInput").placeholder         = l.inputPlaceholder;
+      document.getElementById("verifyBtn").textContent         = l.verifyButton;
+      document.getElementById("copyWordsBtn").textContent      = l.copyWords;
+      document.getElementById("toggleBlurBtn").textContent     = l.toggleBlur;
+      document.getElementById("languageLabel").textContent     = l.languageLabel;
+      document.getElementById("commandsContainer").innerHTML    =
         `<strong>${l.commandsTitle}:</strong> ${l.commandsText}`;
-      document.getElementById("toggleThemeBtn").textContent =
+      document.getElementById("toggleThemeBtn").textContent     =
         document.body.classList.contains("dark") ? l.themeLight : l.themeDark;
     }
 
     function toggleTheme(){
       document.body.classList.toggle("dark");
-      localStorage.setItem("theme", document.body.classList.contains("dark")?"dark":"light");
+      localStorage.setItem("theme",
+        document.body.classList.contains("dark") ? "dark" : "light");
       aggiornaTestiStatici();
     }
 
@@ -251,25 +259,19 @@
       document.getElementById("lang-en").style.fontWeight = lang==='en'?"bold":"normal";
       aggiornaTestiStatici();
       if(document.getElementById("quiz-container").style.display==="flex"){
-        loadQuestion();
-        popolaSidebar();
-        applyBlurState();
+        loadQuestion(); popolaSidebar(); applyBlurState();
       }
     }
 
     function startQuiz(){
       index=0; score=0; wrongAnswers=[];
-      document.getElementById("start-screen").style.display="none";
-      document.getElementById("quiz-container").style.display="flex";
+      document.getElementById("start-screen").style.display = "none";
+      document.getElementById("quiz-container").style.display = "flex";
       aggiornaTestiStatici();
       loadQuestion();
       popolaSidebar();
       updateScore();
       applyBlurState();
-      document.getElementById("verifyBtn").onclick = checkAnswer;
-      document.getElementById("userInput").addEventListener("keydown", e=>{
-        if(e.key==="Enter") checkAnswer();
-      });
     }
 
     function updateScore(){
@@ -279,31 +281,32 @@
 
     function loadQuestion(){
       const q = data[index];
-      document.getElementById("userInput").value="";
-      document.getElementById("result").innerHTML="";
-      document.getElementById("spiegazioni").innerHTML="";
+      document.getElementById("userInput").value   = "";
+      document.getElementById("result").innerHTML  = "";
+      document.getElementById("spiegazioni").innerHTML = "";
       const pct = Math.round((index/data.length)*100);
       document.getElementById("progress-fill").style.width = pct+"%";
       document.getElementById("progress-text").textContent = `${index+1} / ${data.length}`;
-      const ask = labels[currentLang].translate + ": ";
       document.getElementById("question").innerHTML =
-        (index<data.length ? `<strong>${ask}</strong>` + q[currentLang==='it'?"italiano":"inglese"] : "");
+        `<strong>${labels[currentLang].translate}:</strong> ` +
+        q[currentLang==='it'?"italiano":"inglese"];
+      document.getElementById("verifyBtn").onclick = checkAnswer;
     }
 
     function checkAnswer(){
-      const inpt = document.getElementById("userInput").value.trim().toLowerCase();
+      const input = document.getElementById("userInput").value.trim().toLowerCase();
       const correct = data[index].romaji.toLowerCase();
-      if(inpt===correct){
+      if(input === correct){
         const e = data[index];
-        // frase e traduzione
         document.getElementById("result").innerHTML =
           `<strong>Frase:</strong><br>${e.frase}<br><em>${e.traduzione[currentLang]}</em>`;
-        // particelle
+        // raccogli particelle
         const sp = { ...(e.spiegazioni||{}) };
         ["wa","o","ni","to"].forEach(p=>{
-          if(!sp[p] && e.frase.includes(` ${p} `)) sp[p]=spiegazioniGeneriche[p];
+          if(!sp[p] && e.frase.includes(` ${p} `))
+            sp[p] = spiegazioniGeneriche[p];
         });
-        // costruisco html spiegazioni
+        // render spiegazioni
         let html="";
         for(const key in sp){
           const s = sp[key];
@@ -318,57 +321,51 @@
           html += `</div>`;
         }
         document.getElementById("spiegazioni").innerHTML = html;
-
-        score++;
-        updateScore();
-        // non passare subito alla successiva, aspetto un click
+        score++; updateScore();
+        // adesso cambio il listener su Verify per avanzare
+        document.getElementById("verifyBtn").onclick = ()=>{
+          index++;
+          if(index < data.length) loadQuestion();
+          else finishQuiz();
+        };
       } else {
         document.getElementById("result").innerHTML =
           `<span style="color:red;">✗ Risposta sbagliata. Riprova.</span>`;
-        wrongAnswers.push(data[index]);
       }
-      // rimuovo solo al click sul pulsante per avanzare
-      document.getElementById("verifyBtn").onclick = ()=>{
-        if(inpt.toLowerCase()===correct){
-          index++;
-          if(index<data.length) loadQuestion();
-          else finishQuiz();
-        } else {
-          checkAnswer();
-        }
-      };
     }
 
     function finishQuiz(){
-      const l=labels[currentLang];
+      const l = labels[currentLang];
       document.getElementById("question").textContent = l.completed;
-      document.querySelector(".input-group").style.display="none";
+      document.querySelector(".input-group").style.display = "none";
       document.getElementById("progress-text").textContent =
         `${l.finalScore}: ${score} / ${data.length}`;
-      document.getElementById("progress-fill").style.width="100%";
-      const res=document.getElementById("result");
-      const b=document.createElement("button");
-      b.textContent=l.restart; b.onclick=()=>location.reload();
-      res.appendChild(b);
+      document.getElementById("progress-fill").style.width = "100%";
+      const res = document.getElementById("result");
+      const btnR = document.createElement("button");
+      btnR.textContent = l.restart;
+      btnR.onclick = ()=>location.reload();
+      res.appendChild(btnR);
       if(wrongAnswers.length){
-        const w=document.createElement("button");
-        w.textContent=l.retryWrong;
-        w.onclick=()=>{
-          data=[...wrongAnswers]; index=0; score=0; wrongAnswers=[];
+        const btnW = document.createElement("button");
+        btnW.textContent = l.retryWrong;
+        btnW.onclick = ()=>{
+          data = [...wrongAnswers];
+          index=0; score=0; wrongAnswers=[];
           document.querySelector(".input-group").style.display="block";
           loadQuestion(); updateScore();
         };
-        res.appendChild(w);
+        res.appendChild(btnW);
       }
     }
 
     function popolaSidebar(){
-      const sb=document.getElementById("paroleSidebar");
-      sb.innerHTML="";
+      const sb = document.getElementById("paroleSidebar");
+      sb.innerHTML = "";
       data.forEach(e=>{
         const trad = currentLang==='it'? e.italiano : e.inglese;
-        const li=document.createElement("li");
-        li.innerHTML=`<span class="blur">${e.romaji}</span> – <span class="translation">${trad}</span>`;
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="blur">${e.romaji}</span> – <span class="translation">${trad}</span>`;
         sb.appendChild(li);
       });
       document.getElementById("conteggioParole").textContent =
@@ -379,8 +376,8 @@
 
     function applyBlurState(){
       document.querySelectorAll("#paroleSidebar li").forEach(li=>{
-        const r=li.querySelector("span:first-of-type");
-        const t=li.querySelector("span.translation");
+        const r = li.querySelector("span:first-of-type");
+        const t = li.querySelector("span.translation");
         if(blurState===0){ r.classList.add("blur"); t.classList.remove("blur"); }
         else if(blurState===1){ r.classList.remove("blur"); t.classList.remove("blur"); }
         else { r.classList.remove("blur"); t.classList.add("blur"); }
@@ -388,10 +385,11 @@
     }
 
     function copiaParole(){
-      const text=data.map(e=>
+      const text = data.map(e=>
         `${e.romaji} – ${currentLang==='it'?e.italiano:e.inglese}`
       ).join("\n");
-      navigator.clipboard.writeText(text).then(()=> alert(labels[currentLang].copyWords+"!"));
+      navigator.clipboard.writeText(text)
+        .then(()=> alert(labels[currentLang].copyWords+"!"));
     }
   </script>
 </body>
